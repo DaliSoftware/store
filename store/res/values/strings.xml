@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">store</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+     <!-- ———————————————————————— activity 页面常量———————————————————————— -->
+    
+    <!-- activity_main.xml -->
+    <string name="hint_setAccountName">请设置英文字母的登入账号</string>
+    <string name="hint_setImageVerifyValue">确认您不是机器人</string>
+    <string name="bt_getImageVerifyCode">更换图片</string>
+    <string name="hint_setPhone">手机号</string>
+    <string name="hint_setPhoneVerifyCode">输入短信验证码</string>
+    <string name="bt_getPhoneVerifyCode">获取短信验证码</string>
+    <string name="hint_setPassword">设置登入密码</string>
+    <string name="hint_setQuerenPassword">确认登入密码</string>
+    <string name="bt_register">注册</string>
+</resources>
