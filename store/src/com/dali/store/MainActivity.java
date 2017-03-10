@@ -6,9 +6,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.loopj.android.image.SmartImageView;
 
+import android.R.string;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,21 +21,29 @@ import android.os.Message;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private static MainActivity ma;
-	private static int timeout = 10000;
+	private static int timeout = 50000;
 	private static ImageView iv;
 	private static SmartImageView siv;        //验证码图片
 	private static EditText etImageValue;     //输入图片验证码图片控件
 	private static EditText etPhone;          //输入手机号码控件
+	private static EditText etPhoneValue;     //输入手机验证码的控件
+	private static Button btGetPhoneVerifyCode;//获取短信验证码按钮控件
 	
-	private static final String getPhoneVerifyCodePath = "http://192.168.1.18:8080/quanminJieshang/verifyCode/sendRegisterSecurityCode/";
-	private static final String updateImageVerifyPath = "http://192.168.1.18:8080/quanminJieshang/verifyCode/updateImageVerify?width=280&height=110";
-	private static final String checkoutImageVerifyPath = "http://192.168.1.18:8080/quanminJieshang/verifyCode/checkoutImageVerify/";
+	
+	
+	private static UpdatePhoneVerifyCode sendSmsThread;
+	private static final String basePath = "http://192.168.1.18:8080/quanminJieshang/";
+	private static final String getPhoneVerifyCodePath = basePath + "verifyCode/sendRegisterSecurityCode/";
+	private static final String checkoutPhoneVerifyCodePath = basePath + "verifyCode/checkoutPhoneVerifyCode/";
+	private static final String updateImageVerifyPath = basePath + "verifyCode/updateImageVerify?width=280&height=110";
+	private static final String checkoutImageVerifyPath = basePath + "verifyCode/checkoutImageVerify/";
 	//String path = "http://www.mnxz8.com/uploads/allimg/c120814/134495063430210-916450.jpg";
 	
 	
@@ -60,10 +71,25 @@ public class MainActivity extends Activity {
 					Toast.makeText(ma, "错误的图片验证码", 0).show();
 				}
 				break;
-			case 3:
-				if(msg.obj.toString().equals("0")){
-					Toast.makeText(ma, "发送短信验证码时系统出错！ 请检查输入的手机号是否正确", 1).show();
+			case 3:  //处理发生短信验证码请求
+				Map<String, Object> map = (Map<String, Object>) msg.obj;
+				
+				if(map.get("sendCode").toString().equals("0")){
+					Toast.makeText(ma, map.get("message").toString(), 1).show();
+				}else{
+					
 				}
+				break;
+			case 4:  //处理短信验证码校验结果
+				if(msg.obj.toString().equals("0")){
+					Toast.makeText(ma, "您输入的短信验证码不正确！",	 0).show();
+				}else{
+					//短信验证码验证通过  结束读秒进程
+					sendSmsThread.setName("stop"+ sendSmsThread.getName());
+				}
+				break;
+			case 99:
+				btGetPhoneVerifyCode.setText(msg.obj.toString());
 				break;
 			case 0:
 				Toast.makeText(ma, msg.obj.toString(), 0).show();
@@ -80,11 +106,16 @@ public class MainActivity extends Activity {
 		ma = this;
 		
 		siv = (SmartImageView) findViewById(R.id.iv);
-		siv.setImageUrl(updateImageVerifyPath);
+		//siv.setImageUrl(updateImageVerifyPath);
+		updateVerifyImage(null);
 		
 		
 		etImageValue = (EditText) findViewById(R.id.et_image_value);
-		/*etImageValue.setOnFocusChangeListener(new OnFocusChangeListener() {  
+		etPhone = (EditText) findViewById(R.id.et_phone);
+		etPhoneValue = (EditText) findViewById(R.id.et_phoneVerifyCode);
+		btGetPhoneVerifyCode = (Button) findViewById(R.id.bt_getPhoneVerifyCode);
+		
+		etImageValue.setOnFocusChangeListener(new OnFocusChangeListener() {  
 		    @Override  
 		    public void onFocusChange(View v, boolean hasFocus) {  
 		        if(hasFocus) {
@@ -102,10 +133,9 @@ public class MainActivity extends Activity {
 		        	
 		        }
 		    }
-		});*/
+		});
 		
-		etPhone = (EditText) findViewById(R.id.et_phone);
-		/*etPhone.setOnFocusChangeListener(new OnFocusChangeListener() {
+		etPhone.setOnFocusChangeListener(new OnFocusChangeListener() {
 			
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
@@ -115,7 +145,28 @@ public class MainActivity extends Activity {
 					//TODO 校验手机号的正确性
 				}
 			}
-		});*/
+		});
+		
+		//短信验证码控件事件处理
+		etPhoneValue.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(hasFocus){
+					
+				}else{
+					String path = etPhoneValue.getText().toString().trim();
+					if(path.length() > 0){
+						path = checkoutPhoneVerifyCodePath + path;
+						Message msg = handler.obtainMessage();
+						msg.what = 4;//验证短信验证码结果
+						msg.obj = 0;
+						CheckoutVerifyCode ther = new CheckoutVerifyCode(path, msg);
+						ther.start();
+					}
+				}
+			}
+		});
 	}
 
 	
@@ -127,8 +178,8 @@ public class MainActivity extends Activity {
 	public void sendPhoneVerifyCode(View v){
 		String phone = etPhone.getText().toString();
 		if(phone.trim().length() > 0){
-			UpdatePhoneVerifyCode thread = new UpdatePhoneVerifyCode(getPhoneVerifyCodePath + phone);
-			thread.start();
+			sendSmsThread = new UpdatePhoneVerifyCode(getPhoneVerifyCodePath + phone);
+			sendSmsThread.start();
 		}
 	}
 	
@@ -257,6 +308,7 @@ public class MainActivity extends Activity {
 				else{
 					//创建消息对象
 					Message msg = handler.obtainMessage();
+					msg.obj = 0;
 					msg.what = 2;
 					handler.sendMessage(msg);
 				}
@@ -271,11 +323,92 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	
+	/**
+	 * 请求服务器发送短信验证码
+	 * @author Administrator
+	 *
+	 */
 	class UpdatePhoneVerifyCode extends Thread{
 		private String path;
 		public UpdatePhoneVerifyCode(String path){
 			this.path = path;
+		}
+		
+		@Override
+		public void run() {
+			Message msg = handler.obtainMessage();
+			try {
+				msg.obj = 0;
+				msg.what = 3;
+				URL url = new URL(this.path);
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setConnectTimeout(timeout);
+				conn.setReadTimeout(timeout);
+				conn.connect(); 
+
+				if(conn.getResponseCode() == 200){
+					InputStream is = conn.getInputStream();
+	                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	                byte[] buffer = new byte[1024];
+	                int len = 0;
+	                while(-1 != (len = is.read(buffer))){
+	                    baos.write(buffer,0,len);
+	                    baos.flush();
+	                }
+	                String jsonStr = baos.toString("utf-8"); 
+	                Map<String, Object> map = jsonToMap(jsonStr);
+	                msg.obj = map;
+	                
+	                //短信验证码发送成功
+	                if(!map.get("sendCode").toString().equals("0")){
+	                	//读秒器   告诉用户验证码还剩多长时间过期
+						int i = 80;
+						while (i > -1) {
+							try {
+								Thread.sleep(1000);
+								Message msg2 = handler.obtainMessage();
+								msg2.what = 99;
+								msg2.obj = i +" s";
+								
+								//如果短信验证码已经验证通过或者验证码已经过期
+								if(this.getName().startsWith("stop") || i == 0){
+									msg2.obj = "获取短信验证码";
+									handler.sendMessage(msg2);
+									break;
+								}
+								handler.sendMessage(msg2);
+								i --;
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+	                }else{
+	                	
+	                }
+
+	                
+				}else {
+					msg.what = 0;
+					msg.obj = "链接"+this.path+"失败！"+ conn.getResponseCode();
+					handler.sendMessage(msg);
+				}
+			} catch (Exception e) {
+				System.out.println(e.toString());
+				msg.what = 0;
+				msg.obj = "链接"+this.path+"出错！";
+				handler.sendMessage(msg);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	class CheckoutVerifyCode extends Thread{
+		private String path;
+		private Message msg;
+		public CheckoutVerifyCode(String path, Message msg){
+			this.path = path;
+			this.msg = msg;
 		}
 		
 		@Override
@@ -296,26 +429,22 @@ public class MainActivity extends Activity {
 	                    baos.write(buffer,0,len);
 	                    baos.flush();
 	                }
-					Message msg = new Message();
 					msg.obj = baos.toString("utf-8");
-					msg.what = 3;
-					handler.sendMessage(msg);
 					
-				}
-				else{
-					//创建消息对象
-					Message msg = handler.obtainMessage();
-					msg.what = 3;
-					handler.sendMessage(msg);
 				}
 			} catch (Exception e) {
 				System.out.println(e.toString());
-				Message msg = handler.obtainMessage();
 				msg.what = 0;
 				msg.obj = "链接"+this.path+"出错！";
-				handler.sendMessage(msg);
 				e.printStackTrace();
 			}
+			handler.sendMessage(msg);
 		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> jsonToMap(String jsonStr){
+		return JSON.parseObject(jsonStr, Map.class);
 	}
 }
