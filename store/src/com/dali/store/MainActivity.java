@@ -26,9 +26,9 @@ public class MainActivity extends Activity {
 	private static MainActivity ma;
 	private static int timeout = 10000;
 	private static ImageView iv;
-	private static SmartImageView siv;        //ÑéÖ¤ÂëÍ¼Æ¬
-	private static EditText etImageValue;     //ÊäÈëÍ¼Æ¬ÑéÖ¤ÂëÍ¼Æ¬¿Ø¼ş
-	private static EditText etPhone;          //ÊäÈëÊÖ»úºÅÂë¿Ø¼ş
+	private static SmartImageView siv;        //éªŒè¯ç å›¾ç‰‡
+	private static EditText etImageValue;     //è¾“å…¥å›¾ç‰‡éªŒè¯ç å›¾ç‰‡æ§ä»¶
+	private static EditText etPhone;          //è¾“å…¥æ‰‹æœºå·ç æ§ä»¶
 	
 	private static final String getPhoneVerifyCodePath = "http://192.168.1.18:8080/quanminJieshang/verifyCode/sendRegisterSecurityCode/";
 	private static final String updateImageVerifyPath = "http://192.168.1.18:8080/quanminJieshang/verifyCode/updateImageVerify?width=280&height=110";
@@ -38,31 +38,31 @@ public class MainActivity extends Activity {
 	
 	static Handler handler = new Handler(){
 		/**
-         *###ÏûÏ¢¶ÓÁĞ»úÖÆ
-         * Ö÷Ïß³Ì´´½¨Ê±£¬ÏµÍ³»áÍ¬Ê±´´½¨ÏûÏ¢¶ÓÁĞ¶ÔÏó£¨MessageQueue£©ºÍÏûÏ¢ÂÖÑ¯Æ÷¶ÔÏó£¨Looper£©
-         * ÂÖÑ¯Æ÷µÄ×÷ÓÃ£¬¾ÍÊÇ²»Í£µÄ¼ì²âÏûÏ¢¶ÓÁĞÖĞÊÇ·ñÓĞÏûÏ¢£¨Message£©
-         * ÏûÏ¢¶ÓÁĞÒ»µ©ÓĞÏûÏ¢£¬ÂÖÑ¯Æ÷»á°ÑÏûÏ¢¶ÔÏó´«¸øÏûÏ¢´¦ÀíÆ÷£¨Handler£©£¬´¦ÀíÆ÷»áµ÷ÓÃhandleMessage·½·¨À´´¦ÀíÕâÌõÏûÏ¢£¬
-         * handleMessage·½·¨ÔËĞĞÔÚÖ÷Ïß³ÌÖĞ£¬ËùÒÔ¿ÉÒÔË¢ĞÂui
-         * ×Ü½á£ºÖ»ÒªÏûÏ¢¶ÓÁĞÓĞÏûÏ¢£¬handleMessage·½·¨¾Í»áµ÷ÓÃ
-         *×ÓÏß³ÌÈç¹ûĞèÒªË¢ĞÂui£¬Ö»ĞèÒªÍùÏûÏ¢¶ÓÁĞÖĞ·¢Ò»ÌõÏûÏ¢£¬´¥·¢handleMessage·½·¨¼´¿É
-         * ×ÓÏß³ÌÊ¹ÓÃ´¦ÀíÆ÷¶ÔÏóµÄsendMessage·½·¨·¢ËÍÏûÏ¢
+         *###æ¶ˆæ¯é˜Ÿåˆ—æœºåˆ¶
+         * ä¸»çº¿ç¨‹åˆ›å»ºæ—¶ï¼Œç³»ç»Ÿä¼šåŒæ—¶åˆ›å»ºæ¶ˆæ¯é˜Ÿåˆ—å¯¹è±¡ï¼ˆMessageQueueï¼‰å’Œæ¶ˆæ¯è½®è¯¢å™¨å¯¹è±¡ï¼ˆLooperï¼‰
+         * è½®è¯¢å™¨çš„ä½œç”¨ï¼Œå°±æ˜¯ä¸åœçš„æ£€æµ‹æ¶ˆæ¯é˜Ÿåˆ—ä¸­æ˜¯å¦æœ‰æ¶ˆæ¯ï¼ˆMessageï¼‰
+         * æ¶ˆæ¯é˜Ÿåˆ—ä¸€æ—¦æœ‰æ¶ˆæ¯ï¼Œè½®è¯¢å™¨ä¼šæŠŠæ¶ˆæ¯å¯¹è±¡ä¼ ç»™æ¶ˆæ¯å¤„ç†å™¨ï¼ˆHandlerï¼‰ï¼Œå¤„ç†å™¨ä¼šè°ƒç”¨handleMessageæ–¹æ³•æ¥å¤„ç†è¿™æ¡æ¶ˆæ¯ï¼Œ
+         * handleMessageæ–¹æ³•è¿è¡Œåœ¨ä¸»çº¿ç¨‹ä¸­ï¼Œæ‰€ä»¥å¯ä»¥åˆ·æ–°ui
+         * æ€»ç»“ï¼šåªè¦æ¶ˆæ¯é˜Ÿåˆ—æœ‰æ¶ˆæ¯ï¼ŒhandleMessageæ–¹æ³•å°±ä¼šè°ƒç”¨
+         *å­çº¿ç¨‹å¦‚æœéœ€è¦åˆ·æ–°uiï¼Œåªéœ€è¦å¾€æ¶ˆæ¯é˜Ÿåˆ—ä¸­å‘ä¸€æ¡æ¶ˆæ¯ï¼Œè§¦å‘handleMessageæ–¹æ³•å³å¯
+         * å­çº¿ç¨‹ä½¿ç”¨å¤„ç†å™¨å¯¹è±¡çš„sendMessageæ–¹æ³•å‘é€æ¶ˆæ¯
 		 */
 		public void handleMessage(android.os.Message msg) {
-			//Èç¹ûwhatµÄÖµÎª1±íÊ¾ÇëÇó³É¹¦£¬Îª0Ôò±íÊ¾ÇëÇóÊ§°Ü
+			//å¦‚æœwhatçš„å€¼ä¸º1è¡¨ç¤ºè¯·æ±‚æˆåŠŸï¼Œä¸º0åˆ™è¡¨ç¤ºè¯·æ±‚å¤±è´¥
 			switch (msg.what) {
 			case 1:
-				//½«ÏûÏ¢¶ÔÏóÖĞĞ¯´øµÄÎ»Í¼¶ÔÏóË¢ĞÂµ½UI
+				//å°†æ¶ˆæ¯å¯¹è±¡ä¸­æºå¸¦çš„ä½å›¾å¯¹è±¡åˆ·æ–°åˆ°UI
 				siv.setImageBitmap((Bitmap)msg.obj);
 				break;
-			case 2: //Í¼Æ¬ÑéÖ¤ÂëÑéÖ¤½á¹û
+			case 2: //å›¾ç‰‡éªŒè¯ç éªŒè¯ç»“æœ
 				if(msg.obj.toString().equals("0")){
 					//etImageValue.requestFocus();
-					Toast.makeText(ma, "´íÎóµÄÍ¼Æ¬ÑéÖ¤Âë", 0).show();
+					Toast.makeText(ma, "é”™è¯¯çš„å›¾ç‰‡éªŒè¯ç ", 0).show();
 				}
 				break;
 			case 3:
 				if(msg.obj.toString().equals("0")){
-					Toast.makeText(ma, "·¢ËÍ¶ÌĞÅÑéÖ¤ÂëÊ±ÏµÍ³³ö´í£¡ Çë¼ì²éÊäÈëµÄÊÖ»úºÅÊÇ·ñÕıÈ·", 1).show();
+					Toast.makeText(ma, "å‘é€çŸ­ä¿¡éªŒè¯ç æ—¶ç³»ç»Ÿå‡ºé”™ï¼ è¯·æ£€æŸ¥è¾“å…¥çš„æ‰‹æœºå·æ˜¯å¦æ­£ç¡®", 1).show();
 				}
 				break;
 			case 0:
@@ -88,13 +88,13 @@ public class MainActivity extends Activity {
 		    @Override  
 		    public void onFocusChange(View v, boolean hasFocus) {  
 		        if(hasFocus) {
-		        	// ´Ë´¦ÎªµÃµ½½¹µãÊ±µÄ´¦ÀíÄÚÈİ
+		        	// æ­¤å¤„ä¸ºå¾—åˆ°ç„¦ç‚¹æ—¶çš„å¤„ç†å†…å®¹
 		        } else {
 		        	String code = ((EditText)v).getText().toString();
 		        	if(code.trim().length() > 0){
 		        		String checkoutImageVerifyCodePath = checkoutImageVerifyPath + code;
-			        	System.out.println("ÓÃ»§ÊäÈëµÄÑéÖ¤ÂëÊÇ£º"+ checkoutImageVerifyCodePath);
-			        	// ´Ë´¦ÎªÊ§È¥½¹µãÊ±µÄ´¦ÀíÄÚÈİ
+			        	System.out.println("ç”¨æˆ·è¾“å…¥çš„éªŒè¯ç æ˜¯ï¼š"+ checkoutImageVerifyCodePath);
+			        	// æ­¤å¤„ä¸ºå¤±å»ç„¦ç‚¹æ—¶çš„å¤„ç†å†…å®¹
 			        	
 			        	CheckImageVerify t = new CheckImageVerify(checkoutImageVerifyCodePath);
 			    		t.start();
@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
 				if(hasFocus){
 					
 				}else{
-					//TODO Ğ£ÑéÊÖ»úºÅµÄÕıÈ·ĞÔ
+					//TODO æ ¡éªŒæ‰‹æœºå·çš„æ­£ç¡®æ€§
 				}
 			}
 		});*/
@@ -121,7 +121,7 @@ public class MainActivity extends Activity {
 	
 	
 	/**
-	 * ·¢Éú¶ÌĞÅÑéÖ¤Âë
+	 * å‘ç”ŸçŸ­ä¿¡éªŒè¯ç 
 	 * @param v
 	 */
 	public void sendPhoneVerifyCode(View v){
@@ -133,61 +133,61 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * ¸ü»»ÑéÖ¤Í¼Æ¬
+	 * æ›´æ¢éªŒè¯å›¾ç‰‡
 	 * @param v
 	 */
 	public void updateVerifyImage(View v){
 		/** 
-		 * ÂÛ´´½¨Ïß³ÌµÄÖØÒªĞÔ£º
-		 * ¶ÔÓÚÒ»Ğ©ĞèÒªºÄ·Ñ½Ï³¤Ê±¼äÀ´´¦ÀíµÄ¶¯×÷£¬ÔÚ°²×¿4.0ÒÔÇ°µÄ°æ±¾ÊÇ¿ÉÒÔ½«¶¯×÷Ö±½ÓĞ´ÔÚÖ÷Ïß³Ì£¨ÓÖ³ÆUIÏß³Ì£©£¬
-		 * Ö®ºóµÄ°æ±¾ÊÇ²»ÔÊĞíµÄ£¬  ÕâÊÇ°²×¿ÎªÁË±£Ö¤ÓÃ»§ÌåÑé¶ø¶¨ÒåµÄ¹æ·¶£¬ÒòÎªÈç¹û½«ºÄÊ±²Ù×÷·ÅÔÚÖ÷Ïß³Ì£¬
-		 * ¿ÉÄÜ»áµ¼ÖÂÓ¦ÓÃÎŞÏìÓ¦½á¹û£¬Õâ½«½µµÍÓÃ»§µÄÌåÑé¡£
-		 * ÇëÇó·şÎñÆ÷¾ÍÊôÓÚºÄÊ±µÄ²Ù×÷£¨ÔÚÍøËÙ²»¼Ñ¡¢»òÇëÇóµÄ×ÊÔ´½Ï´óÊ±£©
+		 * è®ºåˆ›å»ºçº¿ç¨‹çš„é‡è¦æ€§ï¼š
+		 * å¯¹äºä¸€äº›éœ€è¦è€—è´¹è¾ƒé•¿æ—¶é—´æ¥å¤„ç†çš„åŠ¨ä½œï¼Œåœ¨å®‰å“4.0ä»¥å‰çš„ç‰ˆæœ¬æ˜¯å¯ä»¥å°†åŠ¨ä½œç›´æ¥å†™åœ¨ä¸»çº¿ç¨‹ï¼ˆåˆç§°UIçº¿ç¨‹ï¼‰ï¼Œ
+		 * ä¹‹åçš„ç‰ˆæœ¬æ˜¯ä¸å…è®¸çš„ï¼Œ  è¿™æ˜¯å®‰å“ä¸ºäº†ä¿è¯ç”¨æˆ·ä½“éªŒè€Œå®šä¹‰çš„è§„èŒƒï¼Œå› ä¸ºå¦‚æœå°†è€—æ—¶æ“ä½œæ”¾åœ¨ä¸»çº¿ç¨‹ï¼Œ
+		 * å¯èƒ½ä¼šå¯¼è‡´åº”ç”¨æ— å“åº”ç»“æœï¼Œè¿™å°†é™ä½ç”¨æˆ·çš„ä½“éªŒã€‚
+		 * è¯·æ±‚æœåŠ¡å™¨å°±å±äºè€—æ—¶çš„æ“ä½œï¼ˆåœ¨ç½‘é€Ÿä¸ä½³ã€æˆ–è¯·æ±‚çš„èµ„æºè¾ƒå¤§æ—¶ï¼‰
 		 */
 		Thread t = new Thread(){
 			@Override
 			public void run() {
-				//ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
+				//é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·å›¾ç‰‡
 				//List<View> allImage = getAllChildViews(MainActivity.this.getWindow().getDecorView(), ImageView.class);
-				//1.È·¶¨Òª·ÃÎÊµÄ×ÊÔ´µÄÂ·¾¶
+				//1.ç¡®å®šè¦è®¿é—®çš„èµ„æºçš„è·¯å¾„
 				//String path = "http://192.168.1.18:8080/quanminJieshang/verifyCode/updateImageVerify?width=220&height=100";
 				try {
-					//2.ÓÃ×ÊÔ´Â·¾¶¹¹½¨URL¶ÔÏó
+					//2.ç”¨èµ„æºè·¯å¾„æ„å»ºURLå¯¹è±¡
 					URL url = new URL(updateImageVerifyPath);
-					//3.´ò¿ªÁ¬½Ó¶ÔÏó£¬µ«´ËÊ±²¢Î´½¨Á¢Á¬½Ó
+					//3.æ‰“å¼€è¿æ¥å¯¹è±¡ï¼Œä½†æ­¤æ—¶å¹¶æœªå»ºç«‹è¿æ¥
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-					//4.³õÊ¼»¯Á¬½Ó¶ÔÏó
-					//ÉèÖÃÇëÇó·½·¨
+					//4.åˆå§‹åŒ–è¿æ¥å¯¹è±¡
+					//è®¾ç½®è¯·æ±‚æ–¹æ³•
 					conn.setRequestMethod("GET");
-					//ÉèÖÃÁ¬½Ó³¬Ê±Ê±¼ä
+					//è®¾ç½®è¿æ¥è¶…æ—¶æ—¶é—´
 					conn.setConnectTimeout(timeout);
-					//ÉèÖÃ¶ÁÈ¡Ê±¼ä³¬Ê±Ê±¼ä
+					//è®¾ç½®è¯»å–æ—¶é—´è¶…æ—¶æ—¶é—´
 					conn.setReadTimeout(timeout);
-					//5.Óë·şÎñÆ÷½¨Á¢Á¬½Ó
+					//5.ä¸æœåŠ¡å™¨å»ºç«‹è¿æ¥
 					conn.connect();
-					//»ñÈ¡·şÎñÆ÷ÏìÓ¦Âë£¬Èç¹ûÎª200±íÊ¾Á¬½Ó³É¹¦
+					//è·å–æœåŠ¡å™¨å“åº”ç ï¼Œå¦‚æœä¸º200è¡¨ç¤ºè¿æ¥æˆåŠŸ
 					if(conn.getResponseCode() == 200){
-						//»ñÈ¡Á¬½Ó¶ÔÏóµÄÊäÈëÁ÷£¬ÓÃÀ´¶ÁÈ¡·şÎñÆ÷µÄÊı¾İ
+						//è·å–è¿æ¥å¯¹è±¡çš„è¾“å…¥æµï¼Œç”¨æ¥è¯»å–æœåŠ¡å™¨çš„æ•°æ®
 						InputStream is = conn.getInputStream();
-						//½«ÊäÈëÁ÷¹¹½¨³ÉÎ»Í¼¶ÔÏó
+						//å°†è¾“å…¥æµæ„å»ºæˆä½å›¾å¯¹è±¡
 						Bitmap bm = BitmapFactory.decodeStream(is);
 						
 //						ImageView iv = (ImageView) findViewById(R.id.iv);
-//						//½«Î»Í¼¶ÔÏóÏÔÊ¾ÔÚUI
+//						//å°†ä½å›¾å¯¹è±¡æ˜¾ç¤ºåœ¨UI
 //						iv.setImageBitmap(bm);
 						
 						Message msg = new Message();
-						//ÀûÓÃÏûÏ¢¶ÔÏóĞ¯´øÎ»Í¼¶ÔÏó
+						//åˆ©ç”¨æ¶ˆæ¯å¯¹è±¡æºå¸¦ä½å›¾å¯¹è±¡
 						msg.obj = bm;
 						msg.what = 1;
-						//·¢ËÍÏûÏ¢
+						//å‘é€æ¶ˆæ¯
 						handler.sendMessage(msg);
 						
 					}
 					else{
-//						Toast.makeText(MainActivity.this, "Óë·şÎñÆ÷Á¬½ÓÊ§°Ü", 0).show();
+//						Toast.makeText(MainActivity.this, "ä¸æœåŠ¡å™¨è¿æ¥å¤±è´¥", 0).show();
 						
-						//´´½¨ÏûÏ¢¶ÔÏó
+						//åˆ›å»ºæ¶ˆæ¯å¯¹è±¡
 						Message msg = handler.obtainMessage();
 						msg.what = 0;
 						handler.sendMessage(msg);
@@ -220,7 +220,7 @@ public class MainActivity extends Activity {
 	 }	*/
 	
 	/**
-	 * ÑéÖ¤Í¼Æ¬ÑéÖ¤ÂëÊÇ·ñÕıÈ·
+	 * éªŒè¯å›¾ç‰‡éªŒè¯ç æ˜¯å¦æ­£ç¡®
 	 * @author xiewenhua
 	 *
 	 */
@@ -255,7 +255,7 @@ public class MainActivity extends Activity {
 					
 				}
 				else{
-					//´´½¨ÏûÏ¢¶ÔÏó
+					//åˆ›å»ºæ¶ˆæ¯å¯¹è±¡
 					Message msg = handler.obtainMessage();
 					msg.what = 2;
 					handler.sendMessage(msg);
@@ -264,7 +264,7 @@ public class MainActivity extends Activity {
 				System.out.println(e.toString());
 				Message msg = handler.obtainMessage();
 				msg.what = 0;
-				msg.obj = "Á´½Ó"+this.path+"³ö´í£¡";
+				msg.obj = "é“¾æ¥"+this.path+"å‡ºé”™ï¼";
 				handler.sendMessage(msg);
 				e.printStackTrace();
 			}
@@ -303,7 +303,7 @@ public class MainActivity extends Activity {
 					
 				}
 				else{
-					//´´½¨ÏûÏ¢¶ÔÏó
+					//åˆ›å»ºæ¶ˆæ¯å¯¹è±¡
 					Message msg = handler.obtainMessage();
 					msg.what = 3;
 					handler.sendMessage(msg);
@@ -312,7 +312,7 @@ public class MainActivity extends Activity {
 				System.out.println(e.toString());
 				Message msg = handler.obtainMessage();
 				msg.what = 0;
-				msg.obj = "Á´½Ó"+this.path+"³ö´í£¡";
+				msg.obj = "é“¾æ¥"+this.path+"å‡ºé”™ï¼";
 				handler.sendMessage(msg);
 				e.printStackTrace();
 			}
