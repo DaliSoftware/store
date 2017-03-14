@@ -1,29 +1,14 @@
-package com.dali.store;
+package com.dali.store.activity;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 
-import com.alibaba.fastjson.JSON;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.image.SmartImageView;
-
-import android.R.string;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,28 +17,39 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
-	private static MainActivity ma;
-	private static int timeout = 50000;
-	private static ImageView iv;
+import com.alibaba.fastjson.JSON;
+import com.dali.store.R;
+import com.dali.store.securiy.HashUtil;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.image.SmartImageView;
+
+/**
+ * 注册商户
+ * @author Administrator
+ *
+ */
+public class RegisterActivity extends Activity {
+	private static RegisterActivity ma;
+	private static int timeout = 500000;
 	private static SmartImageView siv;        //验证码图片
-	private static EditText etImageValue;     //输入图片验证码图片控件
+	private static EditText etImageVerifyCode;     //输入图片验证码图片控件
 	private static EditText etAccountName;     //账户名称控件
-	private static EditText etPhone;          //输入手机号码控件
-	private static EditText etPhoneValue;     //输入手机验证码的控件
+	private static EditText etPhoneNumber;          //输入手机号码控件
+	private static EditText etSmsVerifyCode;     //输入手机验证码的控件
 	private static EditText etPassword;       //密码控件
 	private static EditText etQuerenPassword;//确认密码控件
 	private static Button btGetPhoneVerifyCode;//获取短信验证码按钮控件
-	private static Button btRegister;
+//	private static Button btRegister;
 	
 	
 	private static UpdatePhoneVerifyCode sendSmsThread;
+	//private static final String basePath = "http://192.168.1.109:8080/quanminJieshang/";
 	private static final String basePath = "http://192.168.1.18:8080/quanminJieshang/";
 	private static final String getPhoneVerifyCodePath = basePath + "verifyCode/sendRegisterSecurityCode/";
 	private static final String checkoutPhoneVerifyCodePath = basePath + "verifyCode/checkoutPhoneVerifyCode/";
@@ -63,7 +59,8 @@ public class MainActivity extends Activity {
 	//String path = "http://www.mnxz8.com/uploads/allimg/c120814/134495063430210-916450.jpg";
 	private static final String RESULT_MAP_KEY_CODE = "code";
 	private static final String RESULT_MAP_KEY_MESSAGE = "message";
-	
+	private static final String RESULT_CODE_VALUE_0 = "0";
+	public static final int DEFAULT_HASH_INTERATIONS = 64;
 	static Handler handler = new Handler(){
 		/**
          *###消息队列机制
@@ -76,45 +73,72 @@ public class MainActivity extends Activity {
          * 子线程使用处理器对象的sendMessage方法发送消息
 		 */
 		public void handleMessage(android.os.Message msg) {
-			//如果what的值为1表示请求成功，为0则表示请求失败
 			switch (msg.what) {
-			case 1:
-				//将消息对象中携带的位图对象刷新到UI
+			case 1:  //刷新图片验证码
 				siv.setImageBitmap((Bitmap)msg.obj);
 				break;
+				
+				//++++++++++++++++++++++++++++处理验证++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			case 2: //图片验证码验证结果
-				if(msg.obj.toString().equals("0")){
+				if(msg.obj.toString().equals(RESULT_CODE_VALUE_0)){
 					//etImageValue.requestFocus();
-					Toast.makeText(ma, "错误的图片验证码", 0).show();
+					Toast.makeText(ma, "错误的图片验证码", Toast.LENGTH_LONG).show();
 				}
 				break;
 			case 3:  //处理发生短信验证码请求
+				@SuppressWarnings("unchecked")
 				Map<String, Object> map = (Map<String, Object>) msg.obj;
-				
-				if(map.get(RESULT_MAP_KEY_CODE).toString().equals("0")){
-					Toast.makeText(ma, map.get(RESULT_MAP_KEY_MESSAGE).toString(), 1).show();
+				if(map.get(RESULT_MAP_KEY_CODE).toString().equals(RESULT_CODE_VALUE_0)){
+					Toast.makeText(ma, map.get(RESULT_MAP_KEY_MESSAGE).toString(), Toast.LENGTH_LONG).show();
 				}else{
 					
 				}
 				break;
 			case 4:  //处理短信验证码校验结果
 				Map<String, Object> resultMap = jsonToMap(msg.obj.toString());
-				if(resultMap.get(RESULT_MAP_KEY_CODE).toString().equals("0")){
-					Toast.makeText(ma, resultMap.get(RESULT_MAP_KEY_MESSAGE).toString(),1).show();
+				if(resultMap.get(RESULT_MAP_KEY_CODE).toString().equals(RESULT_CODE_VALUE_0)){
+					Toast.makeText(ma, resultMap.get(RESULT_MAP_KEY_MESSAGE).toString(),Toast.LENGTH_LONG).show();
 				}else{
 					//短信验证码验证通过  结束读秒进程
 					sendSmsThread.setName("stop"+ sendSmsThread.getName());
 				}
 				break;
-			case 6:
-				System.out.println(msg.obj.toString());
+			//本地验证失败处理
+			case 17://验证手机号码的正确性
+				String phoneStr = etPhoneNumber.getText().toString().trim();
+				if(phoneStr.length() == 0 ){
+					Toast.makeText(ma, "请输入您的手机号！", Toast.LENGTH_LONG).show();
+					etPhoneNumber.requestFocus();
+					break;
+				}
+				if(phoneStr.length() < 9){
+					Toast.makeText(ma, "您这手机号不对头撒！", Toast.LENGTH_LONG).show();
+					etPhoneNumber.requestFocus();
+				}
 				break;
+			case 18:
+				String pass = etPassword.getText().toString().trim();
+				if(pass.length() != 0 && pass.length() < 6){
+					Toast.makeText(ma, "密码太短咯。。", Toast.LENGTH_LONG).show();
+					etPassword.requestFocus();
+				}
+				break;
+			case 19:
+				String password = etPassword.getText().toString().trim(); 
+				if(password.length() > 0){
+					String querenPass = etQuerenPassword.getText().toString().trim();
+					if(querenPass.length() > 0 && ! password.equals(querenPass)){
+						Toast.makeText(ma, "两次输入的密码不一致", Toast.LENGTH_LONG).show();
+					}
+				}
+				break;
+			
 				
-			case 99:
+			case 99:  //更新获取短信验证码按钮的秒数
 				btGetPhoneVerifyCode.setText(msg.obj.toString());
 				break;
 			case 0:
-				Toast.makeText(ma, msg.obj.toString(), 0).show();
+				Toast.makeText(ma, msg.obj.toString(), Toast.LENGTH_LONG).show();
 				break;
 			}
 			
@@ -124,7 +148,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.register);
 		ma = this;
 		
 		siv = (SmartImageView) findViewById(R.id.iv);
@@ -132,68 +156,114 @@ public class MainActivity extends Activity {
 		updateVerifyImage(null);
 		
 		// 初始化控件
-		etImageValue = (EditText) findViewById(R.id.et_image_value);
+		etImageVerifyCode = (EditText) findViewById(R.id.et_image_value);
 		etAccountName = (EditText) findViewById(R.id.et_accountName);
-		etPhone = (EditText) findViewById(R.id.et_phone);
-		etPhoneValue = (EditText) findViewById(R.id.et_phoneVerifyCode);
+		etPhoneNumber = (EditText) findViewById(R.id.et_phone);
+		etSmsVerifyCode = (EditText) findViewById(R.id.et_phoneVerifyCode);
 		btGetPhoneVerifyCode = (Button) findViewById(R.id.bt_getPhoneVerifyCode);
 		etPassword = (EditText) findViewById(R.id.et_password);
 		etQuerenPassword = (EditText) findViewById(R.id.et_queren_password);
-		btRegister = (Button) findViewById(R.id.bt_register);
+//		btRegister = (Button) findViewById(R.id.bt_register);
 		
 		
 		//控件事件绑定
-		etImageValue.setOnFocusChangeListener(new OnFocusChangeListener() {  
+		etImageVerifyCode.setOnFocusChangeListener(new OnFocusChangeListener() {  
 		    @Override  
 		    public void onFocusChange(View v, boolean hasFocus) {  
 		        if(hasFocus) {
 		        	// 此处为得到焦点时的处理内容
 		        } else {
+		        	
+		        	//验证图片验证码的正确性
 		        	String code = ((EditText)v).getText().toString();
 		        	if(code.trim().length() > 0){
-		        		String checkoutImageVerifyCodePath = checkoutImageVerifyPath + code;
-			        	System.out.println("用户输入的验证码是："+ checkoutImageVerifyCodePath);
-			        	// 此处为失去焦点时的处理内容
-			        	
-			        	CheckImageVerify t = new CheckImageVerify(checkoutImageVerifyCodePath);
+		        		String path = checkoutImageVerifyPath + code;
+			        	CheckImageVerify t = new CheckImageVerify(path);
 			    		t.start();
 		        	}
 		        	
 		        }
 		    }
 		});
+		//控件事件绑定
+		etAccountName.setOnFocusChangeListener(new OnFocusChangeListener() {  
+		    @Override  
+		    public void onFocusChange(View v, boolean hasFocus) {  
+		        if(hasFocus) {
+		        	// 此处为得到焦点时的处理内容
+		        } else {
+					Message msg = handler.obtainMessage();
+					msg.what = 16;
+					handler.sendMessage(msg);
+		        }
+		    }
+		});
 		
-		etPhone.setOnFocusChangeListener(new OnFocusChangeListener() {
+		etPhoneNumber.setOnFocusChangeListener(new OnFocusChangeListener() {
 			
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(hasFocus){
 					
 				}else{
-					//TODO 校验手机号的正确性
+/*					Message msg = handler.obtainMessage();
+					msg.what = 17;
+					handler.sendMessage(msg);*/
 				}
 			}
 		});
 		
 		//短信验证码控件  之焦点事件处理
-		etPhoneValue.setOnFocusChangeListener(new OnFocusChangeListener() {
-			
+		etSmsVerifyCode.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(hasFocus){
 					
 				}else{
-					String path = etPhoneValue.getText().toString().trim();
+					//验证短信验证码是否正确
+					String path = etSmsVerifyCode.getText().toString().trim();
 					if(path.length() > 0){
 						path = checkoutPhoneVerifyCodePath + path;
 						Message msg = handler.obtainMessage();
-						msg.what = 4;//验证短信验证码结果
+						msg.what = 4;
 						msg.obj = 0;
+						
 						CheckoutVerifyCode ther = new CheckoutVerifyCode(path, msg);
 						ther.start();
 					}
 				}
 			}
+		});
+		
+		etPassword.setOnFocusChangeListener(new OnFocusChangeListener(){
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(hasFocus){
+				}else{
+					
+					//校验密码是否符合规范
+					Message msg = handler.obtainMessage();
+					msg.what = 18;
+					handler.sendMessage(msg);
+				}
+			}
+			
+		});
+		
+		etQuerenPassword.setOnFocusChangeListener(new OnFocusChangeListener(){
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(hasFocus){
+					
+				}else{
+					
+					//校验确认密码是否与第一次输入的密码是否一致
+					Message msg = handler.obtainMessage();
+					msg.what = 19;
+					handler.sendMessage(msg);
+				}
+			}
+			
 		});
 		
 	}
@@ -205,11 +275,16 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void sendPhoneVerifyCode(View v){
-		String phone = etPhone.getText().toString();
-		if(phone.trim().length() > 0){
+		String phone = etPhoneNumber.getText().toString().trim();
+		if(phone.length() > 9 && phone.length() < 12){
 			sendSmsThread = new UpdatePhoneVerifyCode(getPhoneVerifyCodePath + phone);
-			sendSmsThread.start();
+			sendSmsThread.start();	
+		}else{
+			Message msg = handler.obtainMessage();
+			msg.what = 17;
+			handler.sendMessage(msg);
 		}
+			
 	}
 	
 	/**
@@ -217,6 +292,18 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void register(View v){
+		
+		
+		//注册前最后校验
+		String name = etAccountName.getText().toString().trim();
+		String phone = etPhoneNumber.getText().toString().trim(); 
+		String pass = etPassword.getText().toString().trim();
+		String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
+		Message msg = handler.obtainMessage();
+		msg.what = 21;
+		handler.sendMessage(msg);
+		
+		
 		//创建异步httpclient
 		AsyncHttpClient ahc = new AsyncHttpClient();
 		
@@ -225,13 +312,12 @@ public class MainActivity extends Activity {
 		//发送post请求提交数据
 		//把要提交的数据封装至RequestParams对象
 		RequestParams params = new RequestParams();
-		String name = etAccountName.getText().toString();
-		String phone = etPhone.getText().toString(); 
-		String pass = etPassword.getText().toString();
+
 		params.add("userName", name);
-		params.add("password", phone);
-		params.add("mobileno", pass);
-		ahc.post(registerPath, params, new MyResponseHandler());
+		params.add("salt", salt);
+		params.add("password", createPassword(name, pass, salt));
+		params.add("mobileno", phone);
+		ahc.post(registerPath, params, new RegisterHandler());
 		/*
 		Register register = new Register(registerPath, name, phone, pass);
 		register.start();*/
@@ -255,8 +341,6 @@ public class MainActivity extends Activity {
 		Thread t = new Thread(){
 			@Override
 			public void run() {
-				//锟斤拷锟斤拷图片
-				//List<View> allImage = getAllChildViews(MainActivity.this.getWindow().getDecorView(), ImageView.class);
 				//1.确定要访问的资源的路径
 				//String path = "http://192.168.1.18:8080/quanminJieshang/verifyCode/updateImageVerify?width=220&height=100";
 				try {
@@ -298,6 +382,7 @@ public class MainActivity extends Activity {
 						//创建消息对象
 						Message msg = handler.obtainMessage();
 						msg.what = 0;
+						msg.obj = "获取图像验证码失败！";
 						handler.sendMessage(msg);
 					}
 				} catch (Exception e) {
@@ -309,23 +394,6 @@ public class MainActivity extends Activity {
 		t.start();
 		
 	}
-	
-/*	 private List<View> getAllChildViews(View parent, Class<?> T) {
-	
-	    List<View> allchildren = new ArrayList<View>();
-	    if (parent instanceof ViewGroup) {
-	       ViewGroup vp = (ViewGroup) parent;
-	       for (int i = 0; i < vp.getChildCount(); i++) {
-	           View viewchild = vp.getChildAt(i);
-	
-	           if (viewchild.getClass().equals(T)) {
-	              allchildren.add(viewchild);
-	           }
-	           allchildren.addAll(getAllChildViews(viewchild, T));
-	       }
-	   } 
-	   return allchildren;
-	 }	*/
 	
 	/**
 	 * 验证图片验证码是否正确
@@ -363,7 +431,6 @@ public class MainActivity extends Activity {
 					
 				}
 				else{
-					//创建消息对象
 					Message msg = handler.obtainMessage();
 					msg.obj = 0;
 					msg.what = 2;
@@ -418,7 +485,7 @@ public class MainActivity extends Activity {
 	                handler.sendMessage(msg);
 	                
 	                //短信验证码发送成功 开启读秒  以告诉用户赶快输入短信验证码  以免过期
-	                if(!map.get(RESULT_MAP_KEY_CODE).toString().equals("0")){
+	                if(!map.get(RESULT_MAP_KEY_CODE).toString().equals(RESULT_CODE_VALUE_0)){
 	                	//读秒器   告诉用户验证码还剩多长时间过期
 						int i = 80;
 						while (i > -1) {
@@ -500,14 +567,14 @@ public class MainActivity extends Activity {
 	}
 	
 
-	class MyResponseHandler extends AsyncHttpResponseHandler{
+	class RegisterHandler extends AsyncHttpResponseHandler{
 	
 		//请求服务器成功时，此方法调用
 		@Override
 		public void onSuccess(int statusCode, Header[] headers,
 				byte[] responseBody) {
 			Map<String, Object> map = jsonToMap(new String(responseBody));
-			Toast.makeText(MainActivity.this, map.get(RESULT_MAP_KEY_MESSAGE).toString(), 1).show();
+			Toast.makeText(RegisterActivity.this, map.get(RESULT_MAP_KEY_MESSAGE).toString(), Toast.LENGTH_LONG).show();
 			
 		}
 	
@@ -515,88 +582,21 @@ public class MainActivity extends Activity {
 		@Override
 		public void onFailure(int statusCode, Header[] headers,
 				byte[] responseBody, Throwable error) {
-			Toast.makeText(MainActivity.this, "请求失败", 0).show();
+			Toast.makeText(RegisterActivity.this, "请求失败", Toast.LENGTH_LONG).show();
 			
 		}
 		
 	}
 	
-	class Register extends Thread{
-		private String path;
-		private String name;
-		private String phone;
-		private String pass;
-		public Register(String path, String name, String phone, String pass){
-			this.path = path;
-			this.name = name;
-			this.phone = phone;
-			this.pass = pass;
-			
-		}
-		
-		@Override
-		public void run() {
-	    	//1.创建客户端对象
-	    	HttpClient hc = new DefaultHttpClient();
-	    	//2.创建post请求对象
-	    	HttpPost hp = new HttpPost(path);
-	    	
-	    	//封装form表单提交的数据
-	    	BasicNameValuePair bnvp = new BasicNameValuePair("name", name);
-	    	BasicNameValuePair bnvp2 = new BasicNameValuePair("pass", pass);
-	    	BasicNameValuePair bnvp3 = new BasicNameValuePair("phone", phone);
-	    	List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
-	    	//把BasicNameValuePair放入集合中
-	    	parameters.add(bnvp);
-	    	parameters.add(bnvp2);
-	    	parameters.add(bnvp3);
-	    	try {
-	    		//要提交的数据都已经在集合中了，把集合传给实体对象
-		    	UrlEncodedFormEntity entity = new UrlEncodedFormEntity(parameters, "utf-8");
-		    	//设置post请求对象的实体，其实就是把要提交的数据封装至post请求的输出流中
-		    	hp.setEntity(entity);
-		    	//3.使用客户端发送post请求
-				HttpResponse hr = hc.execute(hp);
-				if(hr.getStatusLine().getStatusCode() == 200){
-					InputStream is = hr.getEntity().getContent();
-					String text = getTextFromStream(is);
-					
-					//发送消息，让主线程刷新ui显示text
-					Message msg = handler.obtainMessage();
-					msg.what = 6;
-					msg.obj = text;
-					handler.sendMessage(msg);
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+	
 	
 	@SuppressWarnings("unchecked")
 	private static Map<String, Object> jsonToMap(String jsonStr){
 		return JSON.parseObject(jsonStr, Map.class);
 	}
-	
-	
-	
-	private static String getTextFromStream(InputStream is){
-		
-		byte[] b = new byte[1024];
-		int len = 0;
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		try {
-			while((len = is.read(b)) != -1){
-				bos.write(b, 0, len);
-			}
-			String text = new String(bos.toByteArray());
-			bos.close();
-			return text;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+
+	public String createPassword(String accountName, String password, String salt) {
+		String defaultPassword = HashUtil.sha256Hex(password);
+		return HashUtil.sha256Hex(defaultPassword, accountName + salt, DEFAULT_HASH_INTERATIONS);
 	}
 }
