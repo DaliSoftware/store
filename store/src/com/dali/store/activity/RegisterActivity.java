@@ -49,8 +49,8 @@ public class RegisterActivity extends Activity {
 	
 	
 	private static UpdatePhoneVerifyCode sendSmsThread;
-	//private static final String basePath = "http://192.168.1.109:8080/quanminJieshang/";
-	private static final String basePath = "http://192.168.1.18:8080/quanminJieshang/";
+	private static final String basePath = "http://192.168.1.109:8080/quanminJieshang/";
+	//private static final String basePath = "http://192.168.1.18:8080/quanminJieshang/";
 	private static final String getPhoneVerifyCodePath = basePath + "verifyCode/sendRegisterSecurityCode/";
 	private static final String checkoutPhoneVerifyCodePath = basePath + "verifyCode/checkoutPhoneVerifyCode/";
 	private static final String updateImageVerifyPath = basePath + "verifyCode/updateImageVerify?width=280&height=110";

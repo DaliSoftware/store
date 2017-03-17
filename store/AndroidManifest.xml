@@ -16,12 +16,20 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.dali.store.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/welcome" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity android:name="com.dali.store.activity.RegisterActivity"
+            android:label="@string/register_title">
+            
+        </activity>
+        
+        <activity android:name="com.dali.store.activity.WelcomActivity"
+            android:label="@string/wc_title"></activity>
     </application>
 
 </manifest>

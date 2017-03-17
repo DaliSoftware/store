@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -17,4 +17,11 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="LabelEditText.et" parent="@android:attr/textViewStyle">
+        <item name="android:gravity">center_vertical|right</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:paddingRight">10dp</item>
+        <!-- <item name="android:textColor">@null</item> -->
+        <item name="android:background">@null</item>
+    </style>
 </resources>

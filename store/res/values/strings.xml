@@ -8,6 +8,7 @@
      <!-- ———————————————————————— activity 页面常量———————————————————————— -->
     
     <!-- register.xml -->
+    <string name="register_title">注册商户</string>
     <string name="hint_setAccountName">请设置英文字母的登入账号</string>
     <string name="hint_setImageVerifyValue">确认您不是机器人</string>
     <string name="bt_getImageVerifyCode">更换图片</string>
@@ -19,9 +20,14 @@
     <string name="bt_register">注册</string>
     
     <!-- activity_main.xml -->
+    <string name="welcome">欢迎使用，么么哒！</string>
     <string name="hint_login_account">输入账号/手机号</string>
     <string name="hint_login_password">密码</string>
     <string name="bt_login">登入</string>
     <string name="tv_register">注册</string>
     <string name="tv_wanji_pass">忘记密码</string>
+    
+    <!-- welcome.xml -->
+    <string name="wc_title">首页</string>
+    
 </resources>
