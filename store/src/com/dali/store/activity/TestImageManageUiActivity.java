@@ -97,10 +97,14 @@ public class TestImageManageUiActivity extends Activity{
 					startActivityForResult(picture, 2);*/
 	                //选择照片的时候也一样，我们用Action为Intent.ACTION_GET_CONTENT，  
 	                //有些人使用其他的Action但我发现在有些机子中会出问题，所以优先选择这个  
-	                Intent intent = new Intent();  
+/*	                Intent intent = new Intent();  
 	                intent.setType("image/*");  
 	                intent.setAction(Intent.ACTION_GET_CONTENT);  
-	                startActivityForResult(intent, 2); 
+	                startActivityForResult(intent, 2); */
+					
+					Intent intent = new Intent();
+					intent.setClass(context, SelectImageActivity.class);
+					startActivity(intent);
 				}
 			}
 		});
