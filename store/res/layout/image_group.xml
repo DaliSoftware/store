@@ -1,0 +1,38 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dali="http://schemas.android.com/apk/com.dali.store"
+    xmlns:tools="http://schemas.android.com/tools"
+	android:background="#1c1c1c"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.loopj.android.image.SmartImageView 
+        android:id="@+id/siv_bigImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/meinv1"
+        />
+
+    
+    <ImageView android:id="@+id/iv_nextLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center_vertical"
+        android:onClick="nextImageLeft"
+        android:src="@drawable/arrow_left_48px"/>
+    
+    
+    <ImageView android:id="@+id/iv_nextRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center_vertical|right"
+        android:onClick="nextImageRight"
+        android:src="@drawable/arrow_right_48px"/>
+    
+    <ImageView android:id="@+id/iv_upImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="10dp"
+       android:src="@drawable/circle_add_96px"/>
+</FrameLayout>

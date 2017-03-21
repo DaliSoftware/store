@@ -17,6 +17,13 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="BaseItem_Group">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:background">#FCFCFC</item>
+    </style>
+    
+    
     <style name="LabelEditText.et" parent="@android:attr/textViewStyle">
         <item name="android:gravity">center_vertical|right</item>
         <item name="android:textCursorDrawable">@null</item>

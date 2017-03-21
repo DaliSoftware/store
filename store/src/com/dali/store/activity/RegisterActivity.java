@@ -10,6 +10,7 @@ import org.apache.http.Header;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -150,7 +151,9 @@ public class RegisterActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.register);
 		ma = this;
-		
+		Intent data = new Intent();
+		data.putExtra("name", "就是干！");
+		setResult(0, data);
 		siv = (SmartImageView) findViewById(R.id.iv);
 		//siv.setImageUrl(updateImageVerifyPath);
 		updateVerifyImage(null);
@@ -598,5 +601,10 @@ public class RegisterActivity extends Activity {
 	public String createPassword(String accountName, String password, String salt) {
 		String defaultPassword = HashUtil.sha256Hex(password);
 		return HashUtil.sha256Hex(defaultPassword, accountName + salt, DEFAULT_HASH_INTERATIONS);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 }

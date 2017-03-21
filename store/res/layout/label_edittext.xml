@@ -13,7 +13,7 @@
         android:textSize="20dp"
         android:gravity="center_vertical"
         android:layout_alignParentLeft="true"
-        android:text="标签名" />
+        android:text="@string/item_label" />
 
     
     <EditText
@@ -22,7 +22,7 @@
         android:layout_height="50dp"
         android:layout_alignParentRight="true"
         style="@style/LabelEditText.et"
-        android:hint="value">
+        android:hint="@string/item_et_hint">
     </EditText>
 
 </RelativeLayout>

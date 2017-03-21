@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <!-- 自定义控件LabelEditTextView 的属性 -->
-    <declare-styleable name="let">
+    <declare-styleable name="item">
          <attr name="tv_label" format="string"/>
+         <attr name="bixuan" format="string"/>
   	 	 <attr name="et_hint" format="string"/>
   	 	 <attr name="max_length" format="integer"/>
   	</declare-styleable>

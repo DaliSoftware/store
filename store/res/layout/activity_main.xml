@@ -14,7 +14,7 @@
 	<com.dali.store.ui.LabelEditTextView 
 	    android:id="@+id/et_account"
 	    dali:tv_label="账号"
-	    dali:et_hint="账号\\手机号"
+	    dali:et_hint="账号/手机号"
 	    dali:max_length="12"
 	    android:layout_height="wrap_content"
 	    android:layout_width="match_parent">
@@ -43,6 +43,32 @@
         android:onClick="login"
         android:background="#008B00"
         android:text="@string/bt_login" />
+    
+    <Button
+        android:id="@+id/bt_showImages"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:textSize="22dp"
+        android:onClick="showImages"
+        android:background="#008B00"
+        android:text="show images" />
+    
+    
+     <Button
+        android:id="@+id/bt_testImageManageUi"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:textSize="22dp"
+        android:onClick="toTestImageUiActivity"
+        android:background="#008B00"
+        android:text="test imageManageUi" />
+    
+    
+    
+    
+    
 	<RelativeLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
@@ -63,7 +89,81 @@
 		    android:layout_alignParentRight="true"
 		    android:text="@string/tv_wanji_pass" />
 	</RelativeLayout>
-
-
+	<com.dali.store.ui.ButtonItemView
+	    android:id="@+id/biv_test"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    dali:bixuan="（必填）"
+	    dali:label="发货地址"
+	    dali:hint="请填写">
+	    
+	</com.dali.store.ui.ButtonItemView>
 	
+	<com.dali.store.ui.ImageGroup 
+	    android:id="@+id/ig_images"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content">
+	    
+	</com.dali.store.ui.ImageGroup>
+
+<!-- 	<FrameLayout android:background="#1c1c1c"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content">
+	
+	    <ImageView
+	        android:id="@+id/iv_bigImage"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:src="@drawable/meinv1" />
+	
+	    <com.loopj.android.image.SmartImageView 
+	        android:id="@+id/siv_bigImage"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:src="@drawable/meinv1"
+	        />
+	
+	    
+	    <ImageView android:id="@+id/iv_nextLeft"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="10dp"
+	        android:layout_gravity="center_vertical"
+	        android:onClick="nextImageLeft"
+	        android:src="@drawable/arrow_left_48px"/>
+	    
+	    
+	    <ImageView android:id="@+id/iv_nextRight"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="10dp"
+	        android:layout_gravity="center_vertical|right"
+	        android:onClick="nextImageRight"
+	        android:src="@drawable/arrow_right_48px"/>
+	    
+	    <ImageView android:id="@+id/iv_upImage"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="bottom"
+	        android:layout_margin="10dp"
+	        android:src="@drawable/circle_add_96px"/>
+	    <LinearLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="bottom|center"
+	        android:gravity="center_vertical">
+	        <ImageButton
+		        android:id="@+id/imageButton1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/arrow_left_48px" />
+	        <ImageButton
+		        android:id="@+id/imageButton2"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/arrow_right_48px" />
+	    </LinearLayout>
+	</FrameLayout> -->
+	
+
 </LinearLayout>

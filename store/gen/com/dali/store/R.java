@@ -8,6 +8,12 @@
 package com.dali.store;
 
 public final class R {
+    public static final class anim {
+        public static final int push_left_in=0x7f040000;
+        public static final int push_left_out=0x7f040001;
+        public static final int push_right_in=0x7f040002;
+        public static final int push_right_out=0x7f040003;
+    }
     public static final class attr {
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
@@ -16,7 +22,15 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int et_hint=0x7f010001;
+        public static final int bixuan=0x7f010001;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int et_hint=0x7f010002;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -24,7 +38,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int max_length=0x7f010002;
+        public static final int max_length=0x7f010003;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -42,66 +56,105 @@ containing a value of this type.
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f040000;
-        public static final int activity_vertical_margin=0x7f040001;
+        public static final int activity_horizontal_margin=0x7f050000;
+        public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int arrow_left_48px=0x7f020000;
+        public static final int arrow_right=0x7f020001;
+        public static final int arrow_right_48px=0x7f020002;
+        public static final int circle_add_64px=0x7f020003;
+        public static final int circle_add_96px=0x7f020004;
+        public static final int circle_delete_64px=0x7f020005;
+        public static final int circle_delete_96px=0x7f020006;
+        public static final int delete_67px=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
+        public static final int meinv1=0x7f020009;
+        public static final int meinv2=0x7f02000a;
+        public static final int round_16px=0x7f02000b;
+        public static final int round_24px=0x7f02000c;
+        public static final int round_danqian_16px=0x7f02000d;
     }
     public static final class id {
-        public static final int action_settings=0x7f08000e;
-        public static final int bt_getPhoneVerifyCode=0x7f08000c;
-        public static final int bt_register=0x7f080002;
-        public static final int et_account=0x7f080000;
-        public static final int et_accountName=0x7f080009;
-        public static final int et_image_value=0x7f080007;
-        public static final int et_password=0x7f080001;
-        public static final int et_phone=0x7f08000a;
-        public static final int et_phoneVerifyCode=0x7f08000b;
-        public static final int et_queren_password=0x7f08000d;
-        public static final int et_value=0x7f080006;
-        public static final int iv=0x7f080008;
-        public static final int textView2=0x7f080004;
-        public static final int tv_label=0x7f080005;
-        public static final int tv_register=0x7f080003;
+        public static final int action_settings=0x7f09001e;
+        public static final int biv_test=0x7f090007;
+        public static final int bt_getPhoneVerifyCode=0x7f09001a;
+        public static final int bt_register=0x7f090002;
+        public static final int bt_showImages=0x7f090003;
+        public static final int bt_testImageManageUi=0x7f090004;
+        public static final int et_account=0x7f090000;
+        public static final int et_accountName=0x7f090017;
+        public static final int et_image_value=0x7f090015;
+        public static final int et_password=0x7f090001;
+        public static final int et_phone=0x7f090018;
+        public static final int et_phoneVerifyCode=0x7f090019;
+        public static final int et_queren_password=0x7f09001b;
+        public static final int et_value=0x7f090014;
+        public static final int ig_images=0x7f090008;
+        public static final int imv_imageManage=0x7f09001d;
+        public static final int iv=0x7f090016;
+        public static final int iv_arrow_right=0x7f09000b;
+        public static final int iv_delImage=0x7f090012;
+        public static final int iv_nextLeft=0x7f09000e;
+        public static final int iv_nextRight=0x7f09000f;
+        public static final int iv_upImage=0x7f090010;
+        public static final int ll_qiehuan_status=0x7f090013;
+        public static final int siv_bigImage=0x7f09000d;
+        public static final int textView2=0x7f090006;
+        public static final int tv_bixuan=0x7f09000a;
+        public static final int tv_label=0x7f090009;
+        public static final int tv_register=0x7f090005;
+        public static final int tv_value=0x7f09000c;
+        public static final int vf_ImageList=0x7f090011;
+        public static final int vf_images=0x7f09001c;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int label_edittext=0x7f030001;
-        public static final int register=0x7f030002;
-        public static final int welcome=0x7f030003;
+        public static final int button_item=0x7f030001;
+        public static final int image_group=0x7f030002;
+        public static final int image_manage=0x7f030003;
+        public static final int label_edittext=0x7f030004;
+        public static final int register=0x7f030005;
+        public static final int show_images=0x7f030006;
+        public static final int test_image_manage_ui=0x7f030007;
+        public static final int welcome=0x7f030008;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
+        public static final int main=0x7f080000;
     }
     public static final class string {
-        public static final int action_settings=0x7f050002;
-        public static final int app_name=0x7f050000;
-        public static final int bt_getImageVerifyCode=0x7f050006;
-        public static final int bt_getPhoneVerifyCode=0x7f050009;
-        public static final int bt_login=0x7f050010;
-        public static final int bt_register=0x7f05000c;
-        public static final int hello_world=0x7f050001;
-        public static final int hint_login_account=0x7f05000e;
-        public static final int hint_login_password=0x7f05000f;
-        public static final int hint_setAccountName=0x7f050004;
-        public static final int hint_setImageVerifyValue=0x7f050005;
-        public static final int hint_setPassword=0x7f05000a;
-        public static final int hint_setPhone=0x7f050007;
-        public static final int hint_setPhoneVerifyCode=0x7f050008;
-        public static final int hint_setQuerenPassword=0x7f05000b;
+        public static final int action_settings=0x7f060002;
+        public static final int app_name=0x7f060000;
+        public static final int bt_getImageVerifyCode=0x7f060009;
+        public static final int bt_getPhoneVerifyCode=0x7f06000c;
+        public static final int bt_login=0x7f060013;
+        public static final int bt_register=0x7f06000f;
+        public static final int hello_world=0x7f060001;
+        public static final int hint_login_account=0x7f060011;
+        public static final int hint_login_password=0x7f060012;
+        public static final int hint_setAccountName=0x7f060007;
+        public static final int hint_setImageVerifyValue=0x7f060008;
+        public static final int hint_setPassword=0x7f06000d;
+        public static final int hint_setPhone=0x7f06000a;
+        public static final int hint_setPhoneVerifyCode=0x7f06000b;
+        public static final int hint_setQuerenPassword=0x7f06000e;
+        public static final int item_bixuan=0x7f060004;
+        public static final int item_et_hint=0x7f060005;
         /**  ———————————————————————— activity 页面常量———————————————————————— 
- register.xml 
+ 自定义条目 
          */
-        public static final int register_title=0x7f050003;
-        public static final int tv_register=0x7f050011;
-        public static final int tv_wanji_pass=0x7f050012;
+        public static final int item_label=0x7f060003;
+        /**  register.xml 
+         */
+        public static final int register_title=0x7f060006;
+        public static final int tv_register=0x7f060014;
+        public static final int tv_wanji_pass=0x7f060015;
         /**  welcome.xml 
          */
-        public static final int wc_title=0x7f050013;
+        public static final int wc_title=0x7f060016;
         /**  activity_main.xml 
          */
-        public static final int welcome=0x7f05000d;
+        public static final int welcome=0x7f060010;
     }
     public static final class style {
         /** 
@@ -125,34 +178,51 @@ containing a value of this type.
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
-        public static final int LabelEditText_et=0x7f060002;
+        public static final int AppTheme=0x7f070001;
+        public static final int BaseItem_Group=0x7f070002;
+        public static final int LabelEditText_et=0x7f070003;
     }
     public static final class styleable {
-        /**  自定义控件LabelEditTextView 的属性 
+        /** Attributes that can be used with a item.
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #let_et_hint com.dali.store:et_hint}</code></td><td></td></tr>
-           <tr><td><code>{@link #let_max_length com.dali.store:max_length}</code></td><td></td></tr>
-           <tr><td><code>{@link #let_tv_label com.dali.store:tv_label}</code></td><td></td></tr>
+           <tr><td><code>{@link #item_bixuan com.dali.store:bixuan}</code></td><td></td></tr>
+           <tr><td><code>{@link #item_et_hint com.dali.store:et_hint}</code></td><td></td></tr>
+           <tr><td><code>{@link #item_max_length com.dali.store:max_length}</code></td><td></td></tr>
+           <tr><td><code>{@link #item_tv_label com.dali.store:tv_label}</code></td><td></td></tr>
            </table>
-           @see #let_et_hint
-           @see #let_max_length
-           @see #let_tv_label
+           @see #item_bixuan
+           @see #item_et_hint
+           @see #item_max_length
+           @see #item_tv_label
          */
-        public static final int[] let = {
-            0x7f010000, 0x7f010001, 0x7f010002
+        public static final int[] item = {
+            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003
         };
         /**
+          <p>This symbol is the offset where the {@link com.dali.store.R.attr#bixuan}
+          attribute's value can be found in the {@link #item} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.dali.store:bixuan
+        */
+        public static final int item_bixuan = 1;
+        /**
           <p>This symbol is the offset where the {@link com.dali.store.R.attr#et_hint}
-          attribute's value can be found in the {@link #let} array.
+          attribute's value can be found in the {@link #item} array.
 
 
           <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
@@ -163,10 +233,10 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.dali.store:et_hint
         */
-        public static final int let_et_hint = 1;
+        public static final int item_et_hint = 2;
         /**
           <p>This symbol is the offset where the {@link com.dali.store.R.attr#max_length}
-          attribute's value can be found in the {@link #let} array.
+          attribute's value can be found in the {@link #item} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -177,10 +247,10 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.dali.store:max_length
         */
-        public static final int let_max_length = 2;
+        public static final int item_max_length = 3;
         /**
           <p>This symbol is the offset where the {@link com.dali.store.R.attr#tv_label}
-          attribute's value can be found in the {@link #let} array.
+          attribute's value can be found in the {@link #item} array.
 
 
           <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
@@ -191,6 +261,6 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.dali.store:tv_label
         */
-        public static final int let_tv_label = 0;
+        public static final int item_tv_label = 0;
     };
 }
