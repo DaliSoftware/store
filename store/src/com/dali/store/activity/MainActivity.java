@@ -8,20 +8,12 @@ import org.apache.http.Header;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html.ImageGetter;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.alibaba.fastjson.JSON;
 import com.dali.store.R;
@@ -35,8 +27,6 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.image.SmartImageView;
-import com.loopj.android.image.WebImage;
-import com.loopj.android.image.WebImageCache;
 
 public class MainActivity extends Activity {
 	private static final String MA_TOAST_TEXT_404 = "访问网络出错咯！";
