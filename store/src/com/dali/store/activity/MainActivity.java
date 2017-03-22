@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.Header;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -17,12 +22,14 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.dali.store.R;
+import com.dali.store.http.HttpUtil;
 import com.dali.store.securiy.HashUtil;
 import com.dali.store.securiy.SHA256Transcrypter;
 import com.dali.store.securiy.Transcrypter;
 import com.dali.store.ui.ButtonItemView;
 import com.dali.store.ui.ImageGroup;
 import com.dali.store.ui.LabelEditTextView;
+import com.dali.store.util.ConfigUtil;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -40,13 +47,16 @@ public class MainActivity extends Activity {
 	private ImageView ivBigImage;
 	private SmartImageView sivBigImage;
 	private ImageGroup igImages;
+
+
+	private HttpClient httpClient;
 	
 	
 
 	
 	//private static final String basePath = "http://192.168.1.109:8080/quanminJieshang/";
 	private static final String basePath = "http://192.168.1.18:8080/quanminJieshang/";
-	private static final String loginPath = basePath +"/login";
+	private static final String loginPath = basePath +"login";
 	public static final int DEFAULT_HASH_INTERATIONS = 64;
 	
 	
@@ -73,15 +83,15 @@ public class MainActivity extends Activity {
 		// 初始化控件
 		etAccountName = (LabelEditTextView) findViewById(R.id.et_account);
 		etPassword = (LabelEditTextView) findViewById(R.id.et_password);
-		biv = (ButtonItemView) findViewById(R.id.biv_test);
+		//biv = (ButtonItemView) findViewById(R.id.biv_test);
 //		ivBigImage = (ImageView) findViewById(R.id.iv_bigImage);
 		sivBigImage = (SmartImageView) findViewById(R.id.siv_bigImage);
-		igImages = (ImageGroup) findViewById(R.id.ig_images);
+		//igImages = (ImageGroup) findViewById(R.id.ig_images);
 		
 		
 		
 		
-		
+/*		
 		biv.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -90,7 +100,7 @@ public class MainActivity extends Activity {
 				startActivityForResult(intent, 0);
 				
 			}
-		});
+		});*/
 	}
 	
 	
@@ -99,7 +109,7 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void login(View v){
-		String name = etAccountName.getEditTextValue();
+/*		String name = etAccountName.getEditTextValue();
 		String pass = etPassword.getEditTextValue();
 		
 		//创建异步httpclient
@@ -110,7 +120,56 @@ public class MainActivity extends Activity {
 		Transcrypter crypter = new SHA256Transcrypter();
 		params.add("username", name);
 		params.add("password", crypter.encrypt(pass));
-		ahc.post(loginPath, params, new LoginHandler());
+		String version = "1.0.15";
+		try {
+			version = ConfigUtil.getValue(ma, "versionNumber");
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		params.add("version", version);
+		httpClient = ahc.getHttpClient();
+		ahc.post(loginPath, params, new LoginHandler());*/
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				String name = etAccountName.getEditTextValue();
+				String pass = etPassword.getEditTextValue();
+				
+				RequestParams params = new RequestParams();
+				Transcrypter crypter = new SHA256Transcrypter();
+				params.add("username", name);
+				params.add("password", crypter.encrypt(pass));
+				String version = "1.0.15";
+				try {
+					version = ConfigUtil.getValue(ma, "versionNumber");
+				} catch (NameNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+				List<NameValuePair> paramList = new ArrayList<NameValuePair>();
+				paramList.add(new BasicNameValuePair("username",name));
+				paramList.add(new BasicNameValuePair("password", crypter.encrypt(pass)));
+				paramList.add(new BasicNameValuePair("version", version));
+				
+				try {
+					String result = HttpUtil.sendPostRequest(ma, loginPath, paramList);
+					Map<String, Object> resultMap = jsonToMap(result);
+					
+					if("0".equals(resultMap.get("resultCode").toString())){
+						//TODO 登入成功后该干点什么呢？
+					}
+					Message msg = handler.obtainMessage();
+					msg.what = 0;
+					msg.obj = resultMap.get("resultMsg");
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		
 	}
 	
 	public void register(View v){
@@ -157,11 +216,7 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
-	
-	
-	
-	
-	class LoginHandler extends AsyncHttpResponseHandler{
+	/*class LoginHandler extends AsyncHttpResponseHandler{
 	
 		//请求服务器成功时，此方法调用
 		@Override
@@ -173,6 +228,7 @@ public class MainActivity extends Activity {
 				Toast.makeText(ma, map.get("resultMsg").toString(), Toast.LENGTH_LONG).show();	
 			}else{
 				//TODO 登入成功
+				
 				Intent intent = new Intent();
 				intent.setClass(ma, WelcomActivity.class);
 				ma.startActivity(intent);
@@ -188,7 +244,7 @@ public class MainActivity extends Activity {
 			Toast.makeText(ma, MA_TOAST_TEXT_404, Toast.LENGTH_LONG).show();
 		}
 		
-	}
+	}*/
 	
 	@SuppressWarnings("unchecked")
 	private static Map<String, Object> jsonToMap(String jsonStr){

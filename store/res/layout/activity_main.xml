@@ -89,7 +89,7 @@
 		    android:layout_alignParentRight="true"
 		    android:text="@string/tv_wanji_pass" />
 	</RelativeLayout>
-	<com.dali.store.ui.ButtonItemView
+<!-- 	<com.dali.store.ui.ButtonItemView
 	    android:id="@+id/biv_test"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content">
 	    
-	</com.dali.store.ui.ImageGroup>
+	</com.dali.store.ui.ImageGroup> -->
 
 <!-- 	<FrameLayout android:background="#1c1c1c"
 	    android:layout_width="match_parent"
