@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.dali.store.http.HttpUtil;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,10 +47,15 @@ public class WebImage implements SmartImage {
         Bitmap bitmap = null;
 
         try {
-            URLConnection conn = new URL(url).openConnection();
-            conn.setConnectTimeout(CONNECT_TIMEOUT);
-            conn.setReadTimeout(READ_TIMEOUT);
-            bitmap = BitmapFactory.decodeStream((InputStream) conn.getContent());
+        	if(url.contains("quanminJieshang")){
+        		bitmap = HttpUtil.downloadPIC(url, null);
+        	}else{
+        		URLConnection conn = new URL(url).openConnection();
+                conn.setConnectTimeout(CONNECT_TIMEOUT);
+                conn.setReadTimeout(READ_TIMEOUT);
+                bitmap = BitmapFactory.decodeStream((InputStream) conn.getContent());
+        	}
+            
         } catch(Exception e) {
             e.printStackTrace();
         }

@@ -82,7 +82,9 @@ public class MainActivity extends Activity {
 		
 		// 初始化控件
 		etAccountName = (LabelEditTextView) findViewById(R.id.et_account);
+		etAccountName.setEditTextValue("super");
 		etPassword = (LabelEditTextView) findViewById(R.id.et_password);
+		etPassword.setEditTextValue("123456");
 		//biv = (ButtonItemView) findViewById(R.id.biv_test);
 //		ivBigImage = (ImageView) findViewById(R.id.iv_bigImage);
 		sivBigImage = (SmartImageView) findViewById(R.id.siv_bigImage);

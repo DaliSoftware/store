@@ -3,6 +3,7 @@ package com.dali.store.http;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,8 @@ import org.apache.http.params.CoreConnectionPNames;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -73,7 +76,6 @@ public class HttpUtil {
 		try {
 			httppost.addHeader("version", ConfigUtil.getValue(context, "versionNumber"));
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -109,6 +111,34 @@ public class HttpUtil {
 		httpclient.getConnectionManager().shutdown();
 		return result;
 	}
+	
+	
+	/**
+	 * 下载图片
+	 * 
+	 * @param fileUrl
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public static Bitmap downloadPIC(String fileUrl, List<NameValuePair> params)
+			throws Exception {
+		
+		HttpPost httpRequest = new HttpPost(fileUrl);
+		if (params != null && params.size() > 0) {
+			HttpEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
+			httpRequest.setEntity(entity);
+		}
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		if (cookieStore != null) {
+			httpClient.setCookieStore(cookieStore);
+		}
+		HttpResponse httpResponse = httpClient.execute(httpRequest);
+		HttpEntity entity = httpResponse.getEntity();
+		InputStream is = entity.getContent();
+		return BitmapFactory.decodeStream(new PatchInputStream(is));
+	}
+	
 	
 	
 	
