@@ -35,14 +35,13 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.dali.store.activity.MainActivity;
+import com.dali.store.common.Resource;
 import com.dali.store.util.ConfigUtil;
 
 
 public class HttpUtil {
-	public static final int LoginTimeOut = 15*1000;
-	public static final int GetInfoTimeOut = 15*1000;
-	private static final String LOGIN_URL = "http://192.168.1.18:8080/quanminJieshang/login";
-	
+	public static final int LoginTimeOut = 30*1000;
+	public static final int GetInfoTimeOut = 30*1000;
 	public static CookieStore cookieStore;
 	/**
 	 * 上传文件
@@ -197,7 +196,7 @@ public class HttpUtil {
 			intent.setClass(context, MainActivity.class);
 			context.startActivity(intent);
 		}
-		if (url.equals(LOGIN_URL)) {
+		if (url.equals(Resource.urlLogin)) {
 			cookieStore = httpClient.getCookieStore();
 		}
 		return result;

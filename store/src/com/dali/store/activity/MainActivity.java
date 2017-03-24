@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -16,12 +15,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.dali.store.R;
+import com.dali.store.common.Resource;
 import com.dali.store.http.HttpUtil;
 import com.dali.store.securiy.HashUtil;
 import com.dali.store.securiy.SHA256Transcrypter;
@@ -30,8 +29,6 @@ import com.dali.store.ui.ButtonItemView;
 import com.dali.store.ui.ImageGroup;
 import com.dali.store.ui.LabelEditTextView;
 import com.dali.store.util.ConfigUtil;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.image.SmartImageView;
 
@@ -44,24 +41,12 @@ public class MainActivity extends Activity {
 	private static LabelEditTextView etAccountName;     //账户名称控件
 	private static LabelEditTextView etPassword;       //密码控件
 	private ButtonItemView biv;
-	private ImageView ivBigImage;
 	private SmartImageView sivBigImage;
 	private ImageGroup igImages;
 
 
 	private HttpClient httpClient;
-	
-	
-
-	
-	//private static final String basePath = "http://192.168.1.109:8080/quanminJieshang/";
-	private static final String basePath = "http://192.168.1.18:8080/quanminJieshang/";
-	private static final String loginPath = basePath +"login";
 	public static final int DEFAULT_HASH_INTERATIONS = 64;
-	
-	
-	
-	
 	static Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
@@ -156,7 +141,7 @@ public class MainActivity extends Activity {
 				paramList.add(new BasicNameValuePair("version", version));
 				
 				try {
-					String result = HttpUtil.sendPostRequest(ma, loginPath, paramList);
+					String result = HttpUtil.sendPostRequest(ma, Resource.urlLogin, paramList);
 					Map<String, Object> resultMap = jsonToMap(result);
 					
 					if("0".equals(resultMap.get("resultCode").toString())){
@@ -167,6 +152,10 @@ public class MainActivity extends Activity {
 					msg.obj = resultMap.get("resultMsg");
 					handler.sendMessage(msg);
 				} catch (Exception e) {
+					Message msg = handler.obtainMessage();
+					msg.what = 0;
+					msg.obj = "访问网络出错嘞！";
+					handler.sendMessage(msg);
 					e.printStackTrace();
 				}
 			}

@@ -25,6 +25,7 @@ public class TestImageManageUiActivity extends Activity{
 		List<String> imageUrls = new ArrayList<String>();
 		//添加样图
 		imageUrls.add("http://4493bz.1985t.com/uploads/allimg/160202/5-160202104206.jpg");
+		imageUrls.add("http://www.qulishi.com/uploads/collect/201602/m_52589-34arx9p.jpg");
 		imageUrls.add("http://192.168.1.18:8080/quanminJieshang/doc/show/617");
 		imageUrls.add("http://192.168.1.18:8080/quanminJieshang/doc/show/618");
 /*		imageUrls.add("http://www.qulishi.com/uploads/collect/201602/m_52589-0epeuxp.jpg");

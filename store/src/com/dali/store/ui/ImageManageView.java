@@ -5,10 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,6 +17,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,6 +31,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -38,9 +40,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+
 import com.alibaba.fastjson.JSONObject;
 import com.dali.store.R;
+import com.dali.store.common.Resource;
 import com.dali.store.http.HttpUtil;
+import com.loopj.android.image.SmartImageTask.OnCompleteListener;
 import com.loopj.android.image.SmartImageView;
 
 /**
@@ -49,30 +54,27 @@ import com.loopj.android.image.SmartImageView;
  *
  */
 public class ImageManageView extends FrameLayout{
-	//TODO 上传图片的url不能写死
-	private static final String mstrIP = "http://192.168.1.18:8080/quanminJieshang/";
-	private static final String strUploadFile = mstrIP + "doc/upload";
-	
 	/**
 	 * 使用该图片管理控件的activity的实例
 	 */
 	private Activity context;
 	private ViewFlipper vfImages;
+	private ViewFlipper vfMenu;
 	private LinearLayout llQiehuanStatus;
 	private LinearLayout llMenu;
 	private ImageView ivUpImage;
 	private ImageView ivDelImage;	
 	
 
-	private boolean autoStart = true;//通过布局文件设置图片是否自动切换
 	private float x = 0;//触摸屏幕的时的位置x坐标值
 	private int imageSize = 0;
-	private int initWidth, initHeight;//容器初始宽高
 	private ProgressDialog progressDialog;
 	
 	//新拍的需要上传的照片的存放路径
 	private  String tempImagePath;
 	
+	//上一次触摸动作  0为按下事件  1为滑动切换图片事件
+	private int lastTouchAction = 0;
 	@SuppressLint("SimpleDateFormat")
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 	
@@ -83,11 +85,11 @@ public class ImageManageView extends FrameLayout{
 		super(context, attrs);
 		this.context = (Activity) context;
 		LayoutInflater.from(context).inflate(R.layout.image_manage, this);
-		initWidth = getWidth();
-		initHeight = getHeight();
 		
 		vfImages = (ViewFlipper) findViewById(R.id.vf_ImageList);
-		vfImages.setAutoStart(autoStart);
+		vfMenu = (ViewFlipper) findViewById(R.id.vf_menu);
+		
+		vfImages.setAutoStart(true);
 		vfImages.setFlipInterval(2000);
         Animation lInAnim = AnimationUtils.loadAnimation(context, R.anim.push_left_in);       // 向左滑动左侧进入的渐变效果（alpha 0.1  -> 1.0）  
         Animation lOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_left_out);     // 向左滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
@@ -96,7 +98,6 @@ public class ImageManageView extends FrameLayout{
 	    if(vfImages.isAutoStart() && !vfImages.isFlipping()){  
 	    	vfImages.startFlipping();  
         } 
-	    
 	    //向ViewGroup中添加或删除子试图时分别触发onChildViewAdded和onChildViewRemoved方法
 /*	    vfImages.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
 			@Override
@@ -149,15 +150,27 @@ public class ImageManageView extends FrameLayout{
 	    ivDelImage = (ImageView) findViewById(R.id.iv_delImage);
 	    ivDelImage.setOnClickListener(new DelImageClick(this));
 		//gestureDetector = new GestureDetector(this.context, new ImageManageGestureDetector());
+	    
+	    getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			
+			@Override
+			public void onGlobalLayout() {
+				
+				/*
+				 *容器中少于2张图片关闭自动切换 
+				 */
+				if(imageSize < 2){
+					vfImages.stopFlipping();
+				}
+			}
+		});
 	}
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		if(this.initHeight == 0){
-			this.initWidth = getWidth();
-			this.initHeight = getHeight();
-		}
-	}
+
+	/**
+	 * 删除管理器中的一张图片
+	 * @author xiewenhua
+	 *
+	 */
 	private class DelImageClick implements OnClickListener{
 		private ImageManageView imv;
 		public DelImageClick(ImageManageView imv){
@@ -176,16 +189,32 @@ public class ImageManageView extends FrameLayout{
 				v = llQiehuanStatus.getChildAt(llQiehuanStatus.getChildCount() - 1);
 				llQiehuanStatus.removeView(v);
 			}
-/*			
-	
-			if(imageSize == 0){
-				android.view.ViewGroup.LayoutParams params = vfImages.getLayoutParams();
-				params.width = imv.getInitWidth();
-				params.height = imv.getInitHeight();
-				vfImages.setLayoutParams(params);
-			}*/
 		}
 		
+	}
+	
+	/**
+	 * 图片加载成功后动作
+	 * @author xiewenhua
+	 *
+	 */
+	private class ImageLoadComplete extends OnCompleteListener{
+		private SmartImageView siv;
+		public ImageLoadComplete(SmartImageView siv){
+			this.siv = siv;
+		}
+		@Override
+		public void onComplete() {
+			if(siv.getDrawable() == null){
+				return;
+			}
+			vfImages.addView(siv);
+			
+			siv = new SmartImageView(context);
+			siv.setImageResource(R.drawable.round_16px);
+			siv.setId(imageSize ++);
+			llQiehuanStatus.addView(siv);
+		}
 	}
 	
 	
@@ -194,33 +223,44 @@ public class ImageManageView extends FrameLayout{
 			SmartImageView siv = null;
 			for(int i = 0; i < imageUrlList.size(); i ++){
 				siv = new SmartImageView(context);
-				siv.setImageUrl(imageUrlList.get(i));
-				vfImages.addView(siv);
-				
-				siv = new SmartImageView(context);
-				siv.setImageResource(R.drawable.round_16px);
-				siv.setId(imageSize ++);
-				llQiehuanStatus.addView(siv);
+				siv.setImageUrl(imageUrlList.get(i), new ImageLoadComplete(siv));
 			}	
+			
+			if(imageSize != 0){
+				if(vfMenu.getCurrentView().getId() != R.id.ll_qiehuan_status){
+					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.push_bottom_in);
+					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_top_out);
+					vfMenu.setInAnimation(tInAnim);
+					vfMenu.setOutAnimation(tOutAnim);
+					vfMenu.showNext();
+					lastTouchAction = 1;
+				}
+			}
 		}
 	}
 
 	public void addBitmapToViewFipper(Bitmap bm){
-		SmartImageView siv = null;
-		if(imageSize == 0){
-			siv = (SmartImageView) vfImages.getCurrentView();
-			siv.setImageBitmap(bm);
-			llQiehuanStatus.removeAllViews();
-		}else{
+		if(bm != null){
+			SmartImageView siv = null;
+			if(imageSize == 0){
+				siv = (SmartImageView) vfImages.getCurrentView();
+				siv.setImageBitmap(bm);
+				llQiehuanStatus.removeAllViews();
+			}else{
+				siv = new SmartImageView(context);
+				siv.setImageBitmap(bm);
+				vfImages.addView(siv);
+			}
+			
 			siv = new SmartImageView(context);
-			siv.setImageBitmap(bm);
-			vfImages.addView(siv);
+			siv.setImageResource(R.drawable.round_16px);
+			siv.setId(imageSize ++);
+			llQiehuanStatus.addView(siv);	
+			
+			if(vfImages.isAutoStart() && !vfImages.isFlipping() && imageSize > 1){  
+		    	vfImages.startFlipping();  
+	        }
 		}
-		
-		siv = new SmartImageView(context);
-		siv.setImageResource(R.drawable.round_16px);
-		siv.setId(imageSize ++);
-		llQiehuanStatus.addView(siv);
 	}
 	
 	public void doUpImage(){
@@ -298,24 +338,43 @@ public class ImageManageView extends FrameLayout{
 	            vfImages.setInAnimation(rInAnim);  
 	            vfImages.setOutAnimation(rOutAnim);  
 	            vfImages.showPrevious();  
+	            vfImages.setAutoStart(false);
 	            
-				llQiehuanStatus.setVisibility(View.VISIBLE);
-				llMenu.setVisibility(View.GONE);
+	            if(lastTouchAction != 1){
+					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.push_bottom_in);
+					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_top_out);
+					vfMenu.setInAnimation(tInAnim);
+					vfMenu.setOutAnimation(tOutAnim);
+					vfMenu.showNext();
+					lastTouchAction = 1;
+				}
+	            
+	            
 			}else if(juli > 50f){
 	            Animation lInAnim = AnimationUtils.loadAnimation(context, R.anim.push_left_in);       // 向左滑动左侧进入的渐变效果（alpha 0.1  -> 1.0）  
 	            Animation lOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_left_out);     // 向左滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
 	  
 	            vfImages.setInAnimation(lInAnim);  
 	            vfImages.setOutAnimation(lOutAnim);
+	            vfImages.setAutoStart(false);
 	            vfImages.showNext();  
-	            
-	            llQiehuanStatus.setVisibility(View.VISIBLE);
-				llMenu.setVisibility(View.GONE);
+				if(lastTouchAction != 1){//上一次动作不是滑动
+					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.push_bottom_in);
+					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_top_out);
+					vfMenu.setInAnimation(tInAnim);
+					vfMenu.setOutAnimation(tOutAnim);
+					vfMenu.showNext();
+					lastTouchAction = 1;
+				}
 			}else{
-				
-				//隐藏切换状态同时显示菜单栏
-				llQiehuanStatus.setVisibility(View.GONE);
-				llMenu.setVisibility(View.VISIBLE);
+				if(lastTouchAction != 0){
+					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.push_bottom_in);
+					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_top_out);
+					vfMenu.setInAnimation(tInAnim);
+					vfMenu.setOutAnimation(tOutAnim);
+					vfMenu.showNext();
+					lastTouchAction = 0;
+				}
 			}
 			x = 0;
 		}
@@ -349,22 +408,12 @@ public class ImageManageView extends FrameLayout{
 	
 	// 调用android自带图库，显示选中的图片  
     private void showYourPic(Intent data) {  
-    	String imagePath = "";
     	if (data != null) {  
             //取得返回的Uri,基本上选择照片的时候返回的是以Uri形式，但是在拍照中有得机子呢Uri是空的，所以要特别注意  
             Uri imageUri = data.getData();  
             //返回的Uri不为空时，那么图片信息数据都会在Uri中获得。如果为空，那么我们就进行下面的方式获取  
             if (imageUri != null) {  
-                Bitmap image;  
-                try {  
-                    //这个方法是根据Uri获取Bitmap图片的静态方法  
-                    //image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);  
-                	imagePath = imageUri.getPath();
-                	image = suofanImage(imagePath);
-                    addBitmapToViewFipper(image); 
-                } catch (Exception e) {  
-                    e.printStackTrace();  
-                }  
+            	tempImagePath = imageUri.getPath();  
             } else {  
             	/*
             	 *如果启动相机应用时没有自定义图片输出路径将会来到这里
@@ -375,37 +424,53 @@ public class ImageManageView extends FrameLayout{
                 if (extras != null) {  
                     //这里是有些拍照后的图片是直接存放到Bundle中的所以我们可以从这里面获取Bitmap图片  
                     Bitmap image = extras.getParcelable("data");  
-                    addBitmapToViewFipper(image); 
-                    
-                    //将bitmap保存到缓存
-                    imagePath = context.getExternalCacheDir().getPath();
-                    imagePath += "/"+ dateFormat.format(new Date()) +".png";
-                    try {
-						image.compress(CompressFormat.PNG, 100, new FileOutputStream(new File(imagePath)));
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
+                    if(image != null){
+                        //将bitmap保存到缓存
+                    	tempImagePath = context.getExternalCacheDir().getPath();
+                    	tempImagePath += "/"+ dateFormat.format(new Date()) +".png";
+                        try {
+    						image.compress(CompressFormat.PNG, 100, new FileOutputStream(new File(tempImagePath)));
+    					} catch (FileNotFoundException e) {
+    						e.printStackTrace();
+    					}
+                    }
                 }  
             }  
-    	}else{
-        	/*
-        	 * 启动拍照应用时指定了皂片保存路径的话 参数data将会为null
-        	 * 这时需要根据图片的存放路径来获取图片
-        	 */
-        	imagePath = tempImagePath;
-            addBitmapToViewFipper(suofanImage(imagePath)); 
     	}
+    	
     	//上传照片
-    	UploadFile upFileTask = new UploadFile(imagePath);
-     	new Thread(upFileTask).start();
-     	progressDialog = ProgressDialog.show(context, null, "正在上传..."); 
+    	if(new File(tempImagePath).exists()){
+    		UploadFile upFileTask = new UploadFile(tempImagePath);
+         	new Thread(upFileTask).start();
+         	progressDialog = ProgressDialog.show(context, null, "正在上传...");    
+         	progressDialog.setOnCancelListener(new OnUploadOver(upFileTask));
+         	
+    	}
     }  
+    
+    private class OnUploadOver implements OnCancelListener{
+    	private UploadFile upFileTask;
+    	public OnUploadOver(UploadFile upFileTask){
+    		this.upFileTask = upFileTask;
+    	}
+    	
+		@Override
+		public void onCancel(DialogInterface dialog) {
+			if(upFileTask.uploadStatus){
+         		addBitmapToViewFipper(suofanImage(tempImagePath));
+         	}
+		}
+    	
+    }
+    
     /**
      * 按图片管理器大小缩放
      * @param imagePath
      * @return
      */
     private Bitmap suofanImage(String imagePath){
+    	if(! new File(imagePath).exists())
+    		return null;
     	Options option = new Options();
     	option.inJustDecodeBounds = true;
     	Bitmap bm = BitmapFactory.decodeFile(imagePath, option);
@@ -437,6 +502,10 @@ public class ImageManageView extends FrameLayout{
      *
      */
     private class UploadFile implements Runnable{
+    	/**
+    	 * 上传状态  上传成功时为true
+    	 */
+    	public boolean uploadStatus = false;
     	private String filePath;
     	public UploadFile(String filePath){
     		this.filePath = filePath;
@@ -447,14 +516,15 @@ public class ImageManageView extends FrameLayout{
 			String json;
 			try {
 				File file = new File(this.filePath);
-				json = HttpUtil.upLoadFile(context, "upfile", file, strUploadFile, null);
-				progressDialog.dismiss();
+				json = HttpUtil.upLoadFile(context, "upfile", file, Resource.urlUploadFile, null);
 				Map<String, Object> resultMap = JSONObject.parseObject(json, Map.class);
 				
 				//如果图片上传成功
 				if("0".equals(resultMap.get("resultCode").toString())){
 					docIds.add(Integer.parseInt(resultMap.get("docId").toString()));
+					uploadStatus = true;
 				}
+				progressDialog.cancel();
 				System.out.println(json);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -470,21 +540,7 @@ public class ImageManageView extends FrameLayout{
 		this.docIds = docIds;
 	}
 
-	public int getInitWidth() {
-		return initWidth;
+	public void setAutoStart(boolean autoStart){
+		vfImages.setAutoStart(autoStart);
 	}
-
-	public void setInitWidth(int initWidth) {
-		this.initWidth = initWidth;
-	}
-
-	public int getInitHeight() {
-		return initHeight;
-	}
-
-	public void setInitHeight(int initHeight) {
-		this.initHeight = initHeight;
-	}
-	
-	
 }

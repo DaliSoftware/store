@@ -19,7 +19,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ViewFlipper;
 
 /**
- * 圖片展示
+ * 展示单张图片
+ * 可以缩放
  * @author Administrator
  *
  */

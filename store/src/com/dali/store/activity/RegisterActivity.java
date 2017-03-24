@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.dali.store.R;
+import com.dali.store.common.Resource;
 import com.dali.store.securiy.HashUtil;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -50,14 +51,6 @@ public class RegisterActivity extends Activity {
 	
 	
 	private static UpdatePhoneVerifyCode sendSmsThread;
-	private static final String basePath = "http://192.168.1.109:8080/quanminJieshang/";
-	//private static final String basePath = "http://192.168.1.18:8080/quanminJieshang/";
-	private static final String getPhoneVerifyCodePath = basePath + "verifyCode/sendRegisterSecurityCode/";
-	private static final String checkoutPhoneVerifyCodePath = basePath + "verifyCode/checkoutPhoneVerifyCode/";
-	private static final String updateImageVerifyPath = basePath + "verifyCode/updateImageVerify?width=280&height=110";
-	private static final String checkoutImageVerifyPath = basePath + "verifyCode/checkoutImageVerify/";
-	private static final String registerPath = basePath +"user/saveNewAccount";
-	//String path = "http://www.mnxz8.com/uploads/allimg/c120814/134495063430210-916450.jpg";
 	private static final String RESULT_MAP_KEY_CODE = "code";
 	private static final String RESULT_MAP_KEY_MESSAGE = "message";
 	private static final String RESULT_CODE_VALUE_0 = "0";
@@ -180,7 +173,7 @@ public class RegisterActivity extends Activity {
 		        	//验证图片验证码的正确性
 		        	String code = ((EditText)v).getText().toString();
 		        	if(code.trim().length() > 0){
-		        		String path = checkoutImageVerifyPath + code;
+		        		String path = Resource.urlCheckoutImageVerify + code;
 			        	CheckImageVerify t = new CheckImageVerify(path);
 			    		t.start();
 		        	}
@@ -226,7 +219,7 @@ public class RegisterActivity extends Activity {
 					//验证短信验证码是否正确
 					String path = etSmsVerifyCode.getText().toString().trim();
 					if(path.length() > 0){
-						path = checkoutPhoneVerifyCodePath + path;
+						path = Resource.urlCheckoutPhoneVerifyCode + path;
 						Message msg = handler.obtainMessage();
 						msg.what = 4;
 						msg.obj = 0;
@@ -280,7 +273,7 @@ public class RegisterActivity extends Activity {
 	public void sendPhoneVerifyCode(View v){
 		String phone = etPhoneNumber.getText().toString().trim();
 		if(phone.length() > 9 && phone.length() < 12){
-			sendSmsThread = new UpdatePhoneVerifyCode(getPhoneVerifyCodePath + phone);
+			sendSmsThread = new UpdatePhoneVerifyCode(Resource.urlGetPhoneVerifyCode + phone);
 			sendSmsThread.start();	
 		}else{
 			Message msg = handler.obtainMessage();
@@ -320,7 +313,7 @@ public class RegisterActivity extends Activity {
 		params.add("salt", salt);
 		params.add("password", createPassword(name, pass, salt));
 		params.add("mobileno", phone);
-		ahc.post(registerPath, params, new RegisterHandler());
+		ahc.post(Resource.urlRegister, params, new RegisterHandler());
 		/*
 		Register register = new Register(registerPath, name, phone, pass);
 		register.start();*/
@@ -348,7 +341,7 @@ public class RegisterActivity extends Activity {
 				//String path = "http://192.168.1.18:8080/quanminJieshang/verifyCode/updateImageVerify?width=220&height=100";
 				try {
 					//2.用资源路径构建URL对象
-					URL url = new URL(updateImageVerifyPath);
+					URL url = new URL(Resource.urlUpdateImageVerify);
 					//3.打开连接对象，但此时并未建立连接
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					//4.初始化连接对象
@@ -367,10 +360,6 @@ public class RegisterActivity extends Activity {
 						//将输入流构建成位图对象
 						Bitmap bm = BitmapFactory.decodeStream(is);
 						
-//						ImageView iv = (ImageView) findViewById(R.id.iv);
-//						//将位图对象显示在UI
-//						iv.setImageBitmap(bm);
-						
 						Message msg = new Message();
 						//利用消息对象携带位图对象
 						msg.obj = bm;
@@ -380,8 +369,6 @@ public class RegisterActivity extends Activity {
 						
 					}
 					else{
-//						Toast.makeText(MainActivity.this, "与服务器连接失败", 0).show();
-						
 						//创建消息对象
 						Message msg = handler.obtainMessage();
 						msg.what = 0;
@@ -395,7 +382,6 @@ public class RegisterActivity extends Activity {
 			}
 		};
 		t.start();
-		
 	}
 	
 	/**
