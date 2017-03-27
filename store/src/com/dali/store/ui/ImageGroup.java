@@ -32,6 +32,7 @@ public class ImageGroup extends FrameLayout{
 		ivNextLeft = (ImageView) findViewById(R.id.iv_nextLeft);
 		ivNextRight = (ImageView) findViewById(R.id.iv_nextRight);
 		ivUpImage = (ImageView) findViewById(R.id.iv_upImage);
+		
 		ivNextLeft.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -47,8 +48,7 @@ public class ImageGroup extends FrameLayout{
 		ivUpImage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				upImage();
+//				upImage();
 			}
 		});
 		
@@ -88,12 +88,6 @@ public class ImageGroup extends FrameLayout{
 		}
 	}
 	
-	/**
-	 * 上傳圖片
-	 */
-	public void upImage(){
-		
-	}
 	
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -118,7 +112,7 @@ public class ImageGroup extends FrameLayout{
 				}
 			}
 		}else if(event.ACTION_MOVE == event.getAction()){
-			System.out.println("y:"+event.getY()+"    x"+event.getX());
+//			System.out.println("y:"+event.getY()+"    x"+event.getX());
 		}else if(event.ACTION_UP == event.getAction()){
 			x = 0;
 			biaozhi = false;

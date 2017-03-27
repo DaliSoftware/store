@@ -10,6 +10,11 @@ import android.os.Bundle;
 import com.dali.store.R;
 import com.dali.store.ui.ImageManageView;
 
+/**
+ * 测试使用自定义的管理图片控件activity
+ * @author xiewenhua
+ *
+ */
 public class TestImageManageUiActivity extends Activity{
 	private ImageManageView imv;
 	private TestImageManageUiActivity context;

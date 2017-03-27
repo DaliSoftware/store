@@ -97,4 +97,8 @@ public class LabelEditTextView extends RelativeLayout{
 		return etValue.getText().toString();
 	}
 
+	public EditText getEtValue() {
+		return etValue;
+	}
+	
 }

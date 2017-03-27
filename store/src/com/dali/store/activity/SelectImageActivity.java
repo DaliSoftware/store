@@ -24,6 +24,12 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * 自定义选择图片的activity
+ * 暂时没有完善且不能使用
+ * @author xiewenhua
+ *
+ */
 public class SelectImageActivity extends Activity{
 	private static SelectImageActivity context;
 	private ProgressDialog mProgressDialog;

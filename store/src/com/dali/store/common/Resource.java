@@ -5,7 +5,7 @@ public class Resource {
 	/**
 	 * 服务端地址
 	 */
-	public static final String urlService = "http://192.168.1.7:8080/quanminJieshang/";
+	public static final String urlService = "http://192.168.1.18:8080/quanminJieshang/";
 	
 	/**
 	 * 宿舍环境

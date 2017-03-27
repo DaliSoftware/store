@@ -20,6 +20,11 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+/**
+ * app首页
+ * @author xiewenhua
+ *
+ */
 public class WelcomActivity extends Activity {
 	private static final String MA_TOAST_TEXT_404 = "访问网络出错咯！";
 	

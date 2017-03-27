@@ -47,6 +47,9 @@
         <activity android:name="com.dali.store.activity.SelectImageActivity">
             
         </activity>
+        <activity android:name="com.dali.store.activity.ReleaseBaobeiActivity">
+            
+        </activity>
     </application>
 
 </manifest>

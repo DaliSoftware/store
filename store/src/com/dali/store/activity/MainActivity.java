@@ -14,7 +14,13 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -43,7 +49,8 @@ public class MainActivity extends Activity {
 	private ButtonItemView biv;
 	private SmartImageView sivBigImage;
 	private ImageGroup igImages;
-
+	private Button btLogin;
+	
 
 	private HttpClient httpClient;
 	public static final int DEFAULT_HASH_INTERATIONS = 64;
@@ -61,15 +68,30 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		ma = this;
-		
+		btLogin = (Button) findViewById(R.id.bt_register);
+		btLogin.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+						btLogin.getBackground().setAlpha(100);
+				}else if(MotionEvent.ACTION_UP == event.getAction()){
+						btLogin.getBackground().setAlpha(255);
+				}
+				System.out.println(event.getAction());
+				return false;
+			}
+		});
 		
 		// 初始化控件
 		etAccountName = (LabelEditTextView) findViewById(R.id.et_account);
 		etAccountName.setEditTextValue("super");
 		etPassword = (LabelEditTextView) findViewById(R.id.et_password);
-		etPassword.setEditTextValue("123456");
+		etPassword.getEtValue().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD);
+		//etPassword.setEditTextValue("123456");
 		//biv = (ButtonItemView) findViewById(R.id.biv_test);
 //		ivBigImage = (ImageView) findViewById(R.id.iv_bigImage);
 		sivBigImage = (SmartImageView) findViewById(R.id.siv_bigImage);
@@ -207,6 +229,11 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	public void toRelaaseBaobeiActivity(View v){
+		Intent intent = new Intent();
+		intent.setClass(ma, ReleaseBaobeiActivity.class);
+		startActivity(intent);
+	}
 	/*class LoginHandler extends AsyncHttpResponseHandler{
 	
 		//请求服务器成功时，此方法调用
