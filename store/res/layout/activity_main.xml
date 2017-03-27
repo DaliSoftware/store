@@ -95,5 +95,18 @@
 	    android:layout_height="wrap_content"
 	    style="@style/LabelEditText.et"/>
 	
-
+    <com.dali.store.ui.RippleView
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="点我啊混蛋"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="#008B00"
+            android:gravity="center"
+            android:padding="35dp"
+            dali:alphaFactor="0.7"
+            dali:rippleColor="#58FAAC"
+            dali:hover="true"
+     />
 </LinearLayout>
