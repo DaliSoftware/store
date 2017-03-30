@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
 				return false;
 			}
 		});
-		
+		 
 		// 初始化控件
 		etAccountName = (LabelEditTextView) findViewById(R.id.et_account);
 		etAccountName.setEditTextValue("super");
