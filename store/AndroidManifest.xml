@@ -50,6 +50,14 @@
         <activity android:name="com.dali.store.activity.ReleaseBaobeiActivity">
             
         </activity>
+        
+        <activity
+            android:name="com.zhy.imageloader.MainActivity">
+        </activity>
+        
+                <activity
+            android:name="com.example.a.MainActivity2">
+        </activity>
     </application>
 
 </manifest>

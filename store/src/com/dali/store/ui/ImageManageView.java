@@ -81,7 +81,7 @@ public class ImageManageView extends FrameLayout{
 	
 	//上传成功后的图片的资源id集合
 	private List<Integer> docIds = new ArrayList<Integer>();
-	public ImageManageView(Context context, AttributeSet attrs) {
+	public ImageManageView(final Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.context = (Activity) context;
 		LayoutInflater.from(context).inflate(R.layout.image_manage, this);
@@ -142,7 +142,10 @@ public class ImageManageView extends FrameLayout{
 	    ivUpImage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				doUpImage();
+				Intent intent = new Intent();
+				intent.setClass(context, com.zhy.imageloader.MainActivity.class);
+				context.startActivity(intent);
+				//doUpImage();
 			}
 		});
 	    llQiehuanStatus = (LinearLayout) findViewById(R.id.ll_qiehuan_status);
