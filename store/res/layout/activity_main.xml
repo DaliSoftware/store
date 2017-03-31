@@ -7,30 +7,25 @@
     android:orientation="vertical"
     tools:context="com.dali.store.activity.MainActivity" >
 
-	<com.dali.store.ui.LabelEditTextView 
+	<com.dali.ui.LabelEditTextView 
 	    android:id="@+id/et_account"
 	    dali:tv_label="账号"
 	    dali:et_hint="账号/手机号"
 	    dali:max_length="12"
 	    android:layout_height="wrap_content"
-	    android:layout_width="match_parent">
-	    
-	</com.dali.store.ui.LabelEditTextView>
+	    android:layout_width="match_parent"/>
 	
 	<TextView android:layout_width="match_parent" 
 	    android:layout_height="1px"
 	    android:background="#CCCCCC"/>
 	
-	<com.dali.store.ui.LabelEditTextView 
+	<com.dali.ui.LabelEditTextView 
 	    android:id="@+id/et_password"
 	    dali:tv_label="密码"
 	    dali:max_length="18"
 	    dali:et_hint="输入密码"
 	    android:layout_height="wrap_content"
-	    android:layout_width="match_parent">
-	</com.dali.store.ui.LabelEditTextView>
-
-
+	    android:layout_width="match_parent"/>
     <Button
         android:id="@+id/bt_register"
         android:layout_width="match_parent"
@@ -95,7 +90,7 @@
 	    android:layout_height="wrap_content"
 	    style="@style/LabelEditText.et"/>
 	
-    <com.dali.store.ui.RippleView
+    <com.dali.ui.RippleButtonView
             android:id="@+id/btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

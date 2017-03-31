@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">ui</string>
+
+    <!-- 自定义条目 -->
+    <string name="item_label">条目标签</string>
+    <string name="item_bixuan">（可选）</string>
+    <string name="item_et_hint">Hint</string>
+</resources>

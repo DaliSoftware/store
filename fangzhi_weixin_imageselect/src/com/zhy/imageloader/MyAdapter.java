@@ -46,14 +46,25 @@ public class MyAdapter extends CommonAdapter<String>
 		final ImageView mSelect = helper.getView(R.id.id_item_select);
 		
 		mImageView.setColorFilter(null);
+		
 		//设置ImageView的点击事件
 		mImageView.setOnClickListener(new OnClickListener()
 		{
-			//选择，则将图片变暗，反之则反之
+			
 			@Override
 			public void onClick(View v)
 			{
 
+			}
+		});
+		
+		mSelect.setOnClickListener(new OnClickListener() {
+			
+			/**
+			 * 选择，则将图片变暗，反之则反之
+			 */
+			@Override
+			public void onClick(View v) {
 				// 已经选择过该图片
 				if (mSelectedImage.contains(mDirPath + "/" + item))
 				{
@@ -63,11 +74,19 @@ public class MyAdapter extends CommonAdapter<String>
 				} else
 				// 未选择该图片
 				{
-					mSelectedImage.add(mDirPath + "/" + item);
-					mSelect.setImageResource(R.drawable.pictures_selected);
-					mImageView.setColorFilter(Color.parseColor("#77000000"));
+					if(getSelActivity().getMaxSelectNumber() > mSelectedImage.size()){
+						mSelectedImage.add(mDirPath + "/" + item);
+						mSelect.setImageResource(R.drawable.pictures_selected);
+						mImageView.setColorFilter(Color.parseColor("#77000000"));
+					}
+					
 				}
-
+				StringBuffer text = new StringBuffer("完成（");
+				text.append(mSelectedImage.size());
+				text.append("/");
+				text.append(getSelActivity().getMaxSelectNumber());
+				text.append("）");
+				getSelActivity().resetOkButtonText(text.toString());
 			}
 		});
 		
@@ -80,5 +99,9 @@ public class MyAdapter extends CommonAdapter<String>
 			mImageView.setColorFilter(Color.parseColor("#77000000"));
 		}
 
+	}
+	
+	private SelectedActivity getSelActivity(){
+		return (SelectedActivity) super.mContext;
 	}
 }

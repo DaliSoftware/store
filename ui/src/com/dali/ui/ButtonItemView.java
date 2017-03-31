@@ -1,12 +1,10 @@
-package com.dali.store.ui;
+package com.dali.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.dali.store.R;
 
 public class ButtonItemView extends RelativeLayout{
 	private TextView tvLabel;

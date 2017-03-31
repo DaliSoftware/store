@@ -6,10 +6,6 @@
     <string name="action_settings">Settings</string>
 
      <!-- ———————————————————————— activity 页面常量———————————————————————— -->
-    <!-- 自定义条目 -->
-    <string name="item_label">条目标签</string>
-    <string name="item_bixuan">（可选）</string>
-    <string name="item_et_hint">Hint</string>
     
     <!-- register.xml -->
     <string name="register_title">注册商户</string>
