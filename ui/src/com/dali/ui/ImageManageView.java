@@ -50,6 +50,12 @@ import com.zhy.imageloader.SelectedActivity;
 
 /**
  * 自定义图片管理控件
+ * 
+ * 可以上传图片，使用前确保上传文件的http接口已经配置，通过设置appbase项目的
+ * com.dali.app.base.common.Resource.urlUploadFile属性来指定上传文件的接口
+ * 
+ * 
+ * 
  * @author xiewenhua
  *
  */
@@ -79,8 +85,11 @@ public class ImageManageView extends FrameLayout{
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 	
 	
-	//上传成功后的图片的资源id集合
+	/**
+	 * 上传成功后的图片的资源id集合
+	 */
 	private List<Integer> docIds = new ArrayList<Integer>();
+	
 	public ImageManageView(final Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.context = (Activity) context;

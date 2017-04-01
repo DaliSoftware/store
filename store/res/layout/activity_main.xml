@@ -4,6 +4,8 @@
     android:background="#DBDBDB"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
     android:orientation="vertical"
     tools:context="com.dali.store.activity.MainActivity" >
 
@@ -26,13 +28,19 @@
 	    dali:et_hint="输入密码"
 	    android:layout_height="wrap_content"
 	    android:layout_width="match_parent"/>
-    <Button
+
+	<com.dali.ui.RippleButtonView
         android:id="@+id/bt_register"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
         android:textSize="22dp"
         android:onClick="login"
         android:background="#008B00"
+        dali:alphaFactor="0.7"
+        dali:rippleColor="#58FAAC"
+        dali:hover="true"
         android:text="@string/bt_login" />
     
     <Button
@@ -44,17 +52,7 @@
         android:onClick="showImages"
         android:background="#008B00"
         android:text="show images" />
-    
-    
-     <Button
-        android:id="@+id/bt_testImageManageUi"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:textSize="22dp"
-        android:onClick="toTestImageUiActivity"
-        android:background="#008B00"
-        android:text="test imageManageUi" />
+
     <Button
         android:id="@+id/bt_releaseBaobei"
         android:layout_width="match_parent"
@@ -68,6 +66,8 @@
 	<RelativeLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
+	    android:paddingLeft="5dp"
+	    android:paddingRight="5dp"
 	    android:layout_marginTop="8dp">
 		<TextView
 		    android:id="@+id/tv_register"
@@ -85,23 +85,4 @@
 		    android:text="@string/tv_wanji_pass" />
 	</RelativeLayout>
 	
-	<EditText 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    style="@style/LabelEditText.et"/>
-	
-    <com.dali.ui.RippleButtonView
-            android:id="@+id/btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="点我啊混蛋"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:background="#008B00"
-            android:gravity="center"
-            android:padding="35dp"
-            dali:alphaFactor="0.7"
-            dali:rippleColor="#58FAAC"
-            dali:hover="true"
-     />
 </LinearLayout>

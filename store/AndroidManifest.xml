@@ -39,7 +39,6 @@
             android:label="@string/wc_title"></activity>
         
         <activity android:name="com.dali.store.activity.ShowImagesActivity"></activity>
-        <activity android:name="com.dali.store.activity.TestImageManageUiActivity"></activity>
         <activity android:name="com.dali.store.activity.ReleaseBaobeiActivity"></activity>
         <activity android:name="com.zhy.imageloader.SelectedActivity"></activity>
     </application>

@@ -221,14 +221,6 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
-	
-	
-	public void toTestImageUiActivity(View v){
-		Intent intent = new Intent();
-		intent.setClass(ma, TestImageManageUiActivity.class);
-		startActivity(intent);
-	}
-	
 	public void toRelaaseBaobeiActivity(View v){
 		Intent intent = new Intent();
 		intent.setClass(ma, ReleaseBaobeiActivity.class);
