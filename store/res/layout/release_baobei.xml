@@ -18,40 +18,38 @@
         android:layout_weight="65"
         android:orientation="vertical">
         
-	    <com.dali.store.ui.LabelEditTextView 
+	    <com.dali.ui.LabelEditTextView 
 		    android:id="@+id/et_baobei_name"
 		    dali:tv_label="宝贝名称"
 		    dali:et_hint="名称"
 		    dali:max_length="12"
 		    android:layout_height="wrap_content"
-		    android:layout_width="match_parent">
+		    android:layout_width="match_parent"/>
 		    
-		</com.dali.store.ui.LabelEditTextView>
         <TextView android:layout_width="match_parent" 
 	 	   android:layout_height="1px"
 	    	android:background="#CCCCCC"/>
 	
-		<com.dali.store.ui.LabelEditTextView 
+		<com.dali.ui.LabelEditTextView 
 		    android:id="@+id/et_password"
 		    dali:tv_label="密码"
 		    dali:max_length="18"
 		    dali:et_hint="输入密码"
 		    android:layout_height="wrap_content"
-		    android:layout_width="match_parent">
-		</com.dali.store.ui.LabelEditTextView>
+		    android:layout_width="match_parent"/>
         <TextView android:layout_width="match_parent" 
 	 	   android:layout_height="1px"
 	    	android:background="#CCCCCC"/>
-		<com.dali.store.ui.ButtonItemView 
+        
+		<com.dali.ui.ButtonItemView 
 		    android:id="@+id/biv_chushou_celve"
 		    dali:label="出售方案"
 		    dali:bixuan="必选"
 		    dali:hint="选择方案"
 		    android:layout_height="wrap_content"
-		    android:layout_width="match_parent">
-		</com.dali.store.ui.ButtonItemView>
+		    android:layout_width="match_parent"/>
 		
-	    <Button
+	    <com.dali.ui.RippleButtonView
 	        android:id="@+id/bt_releaseBaobei"
 	        android:layout_width="match_parent"
 	        android:layout_height="50dp"
@@ -59,6 +57,10 @@
 	        android:textSize="22dp"
 	        android:onClick="relaaseBaobei"
 	        android:background="#008B00"
-	        android:text="发布宝贝" />
+	        android:text="发布宝贝"
+	        android:gravity="center"
+	        dali:alphaFactor="0.7"
+            dali:rippleColor="#58FAAC"
+            dali:hover="true" />
     </LinearLayout>
 </LinearLayout>    

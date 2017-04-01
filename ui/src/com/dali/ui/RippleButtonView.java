@@ -1,4 +1,4 @@
-package com.dali.store.ui;
+package com.dali.ui;
 
 /*
  * Copyright (C) 2013 Muthuramakrishnan <siriscac@gmail.com>
@@ -26,13 +26,12 @@ import android.view.MotionEvent;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 
-import com.dali.store.R;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
 @SuppressLint("ClickableViewAccessibility")
-public class RippleView extends Button {
+public class RippleButtonView extends Button {
 
     private float mDownX;
     private float mDownY;
@@ -53,15 +52,15 @@ public class RippleView extends Button {
         return (int) (dp * mDensity + 0.5f);
     }
 
-    public RippleView(Context context) {
+    public RippleButtonView(Context context) {
         this(context, null);
     }
 
-    public RippleView(Context context, AttributeSet attrs) {
+    public RippleButtonView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RippleView(Context context, AttributeSet attrs, int defStyle) {
+    public RippleButtonView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
         TypedArray a = context.obtainStyledAttributes(attrs,
@@ -127,7 +126,7 @@ public class RippleView extends Button {
                 @Override
                 public void onAnimationEnd(Animator animator) {
                     setRadius(0);
-                    ViewHelper.setAlpha(RippleView.this, 1);
+                    ViewHelper.setAlpha(RippleButtonView.this, 1);
                     mIsAnimating = false;
                 }
 
@@ -187,7 +186,7 @@ public class RippleView extends Button {
                 @Override
                 public void onAnimationEnd(Animator animator) {
                     setRadius(0);
-                    ViewHelper.setAlpha(RippleView.this, 1);
+                    ViewHelper.setAlpha(RippleButtonView.this, 1);
                     mIsAnimating = false;
                 }
 

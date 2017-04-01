@@ -1,9 +1,7 @@
-package com.dali.store.ui;
+package com.dali.ui;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.dali.store.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;

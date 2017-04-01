@@ -1,12 +1,59 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dali="http://schemas.android.com/apk/com.dali.ui"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+    <RelativeLayout
+        android:id="@+id/ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingTop="5dp"
+        android:paddingBottom="3dp"
+        android:background="#000000"
+        android:clickable="true" >
+		
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/iv_brack"
+            android:src="@drawable/matte_white_square_icon_64"
+            android:contentDescription="返回"
+            />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_brack"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dip"
+            android:text="选择图片"
+            android:textColor="@android:color/white" />
 
+        <com.dali.ui.RippleButtonView
+            android:id="@+id/bt_select_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="完成"
+            android:textSize="13dp"
+            dali:alphaFactor="0.7"
+            dali:rippleColor="#58FAAC"
+            dali:hover="true"
+            android:background="@drawable/button_shape"
+            android:textColor="@android:color/white" />
+        
+    </RelativeLayout>
+    
     <GridView
         android:id="@+id/id_gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/ll_top"
         android:cacheColorHint="@android:color/transparent"
         android:clipChildren="true"
         android:gravity="center"

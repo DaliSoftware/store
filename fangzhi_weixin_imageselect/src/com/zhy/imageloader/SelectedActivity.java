@@ -10,6 +10,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,11 +21,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.PopupWindow.OnDismissListener;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,10 +35,34 @@ import android.widget.Toast;
 import com.zhy.bean.ImageFloder;
 import com.zhy.imageloader.ListImageDirPopupWindow.OnImageDirSelected;
 
-public class MainActivity extends Activity implements OnImageDirSelected
+/**
+ * 仿微信选择图片，调用该activity来选择图片,示例<br>
+ * <b>
+ * 调用方式：
+ * 				Intent intent = new Intent();
+				intent.setClass(context, SelectedActivity.class);
+				startActivityForResult(intent, 88);
+	</b>			
+	获取选择的图片方式：<br>
+		public void onActivityResult(int requestCode, int resultCode, Intent data){
+		if(SelectedActivity.SELECTED_RESULT_CODE == resultCode){
+			if(data != null){
+				ArrayList<CharSequence> list = data.getCharSequenceArrayListExtra(SelectedActivity.SELECTED_IMAGE_LIST_KEY);
+			}
+		}	
+ */
+public class SelectedActivity extends Activity implements OnImageDirSelected
 {
+	public static final String SELECTED_IMAGE_LIST_KEY = "selectedImageList";
+	public static final int SELECTED_RESULT_CODE = 84565;
+	
 	private ProgressDialog mProgressDialog;
-
+	
+	/**
+	 * 最多选择可选择图片数量
+	 */
+	private int maxSelectNumber  = 9;
+	
 	/**
 	 * 存储文件夹中的图片数量
 	 */
@@ -65,6 +92,8 @@ public class MainActivity extends Activity implements OnImageDirSelected
 
 	private TextView mChooseDir;
 	private TextView mImageCount;
+	private Button mBtSelOk;
+	
 	int totalCount = 0;
 
 	private int mScreenHeight;
@@ -99,7 +128,7 @@ public class MainActivity extends Activity implements OnImageDirSelected
 		/**
 		 * 可以看到文件夹的路径和图片的路径分开保存，极大的减少了内存的消耗；
 		 */
-		mAdapter = new MyAdapter(getApplicationContext(), mImgs,
+		mAdapter = new MyAdapter(this, mImgs,
 				R.layout.grid_item, mImgDir.getAbsolutePath());
 		mGirdView.setAdapter(mAdapter);
 		mImageCount.setText(totalCount + "张");
@@ -117,7 +146,6 @@ public class MainActivity extends Activity implements OnImageDirSelected
 
 		mListImageDirPopupWindow.setOnDismissListener(new OnDismissListener()
 		{
-
 			@Override
 			public void onDismiss()
 			{
@@ -127,6 +155,7 @@ public class MainActivity extends Activity implements OnImageDirSelected
 				getWindow().setAttributes(lp);
 			}
 		});
+		
 		// 设置选择文件夹的回调
 		mListImageDirPopupWindow.setOnImageDirSelected(this);
 	}
@@ -135,6 +164,7 @@ public class MainActivity extends Activity implements OnImageDirSelected
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.imgsel_activity_main);
 
 		//获取屏幕的高度的像数个数
@@ -148,6 +178,14 @@ public class MainActivity extends Activity implements OnImageDirSelected
 
 	}
 
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent();
+		ArrayList<String> list = new ArrayList<String>(mAdapter.mSelectedImage);
+		intent.putStringArrayListExtra(SELECTED_IMAGE_LIST_KEY, list);
+		setResult(SELECTED_RESULT_CODE, intent);
+		super.onBackPressed();
+	}
 	/**
 	 * 利用ContentProvider扫描手机中的图片，此方法在运行在子线程中 完成图片的扫描，最终获得jpg最多的那个文件夹
 	 */
@@ -171,7 +209,7 @@ public class MainActivity extends Activity implements OnImageDirSelected
 				String firstImage = null;
 
 				Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-				ContentResolver mContentResolver = MainActivity.this
+				ContentResolver mContentResolver = SelectedActivity.this
 						.getContentResolver();
 
 				// 只查询jpeg和png的图片
@@ -258,7 +296,7 @@ public class MainActivity extends Activity implements OnImageDirSelected
 		mImageCount = (TextView) findViewById(R.id.id_total_count);
 
 		mBottomLy = (RelativeLayout) findViewById(R.id.id_bottom_ly);
-
+		mBtSelOk = (Button)findViewById(R.id.bt_select_ok);
 	}
 
 	private void initEvent()
@@ -302,7 +340,7 @@ public class MainActivity extends Activity implements OnImageDirSelected
 		/**
 		 * 可以看到文件夹的路径和图片的路径分开保存，极大的减少了内存的消耗；
 		 */
-		mAdapter = new MyAdapter(getApplicationContext(), mImgs,
+		mAdapter = new MyAdapter(this, mImgs,
 				R.layout.grid_item, mImgDir.getAbsolutePath());
 		mGirdView.setAdapter(mAdapter);
 		// mAdapter.notifyDataSetChanged();
@@ -312,4 +350,15 @@ public class MainActivity extends Activity implements OnImageDirSelected
 
 	}
 
+	public void resetOkButtonText(String text){
+		mBtSelOk.setText(text);
+	}
+	
+	public int getMaxSelectNumber() {
+		return maxSelectNumber;
+	}
+
+	public void setMaxSelectNumber(int maxSelectNumber) {
+		this.maxSelectNumber = maxSelectNumber;
+	}
 }

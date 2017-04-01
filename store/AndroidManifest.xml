@@ -52,7 +52,7 @@
         </activity>
         
         <activity
-            android:name="com.zhy.imageloader.MainActivity">
+            android:name="com.zhy.imageloader.SelectedActivity">
         </activity>
         
                 <activity

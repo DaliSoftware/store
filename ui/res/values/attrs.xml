@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <declare-styleable name="item">
+         <attr name="tv_label" format="string"/>
+         <attr name="bixuan" format="string"/>
+  	 	 <attr name="et_hint" format="string"/>
+  	 	 <attr name="max_length" format="integer"/>
+  	</declare-styleable>
+    
+    <declare-styleable name="RippleView">
+        <attr name="rippleColor" format="color" />
+        <attr name="alphaFactor" format="float" />
+        <attr name="hover" format="boolean" />
+    </declare-styleable>
+</resources>

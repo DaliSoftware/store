@@ -47,6 +47,7 @@ import com.dali.store.common.Resource;
 import com.dali.store.http.HttpUtil;
 import com.loopj.android.image.SmartImageTask.OnCompleteListener;
 import com.loopj.android.image.SmartImageView;
+import com.zhy.imageloader.SelectedActivity;
 
 /**
  * 自定义图片管理控件
@@ -143,8 +144,8 @@ public class ImageManageView extends FrameLayout{
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent();
-				intent.setClass(context, com.zhy.imageloader.MainActivity.class);
-				context.startActivity(intent);
+				intent.setClass(context, SelectedActivity.class);
+				ImageManageView.this.context.startActivityForResult(intent, 88);
 				//doUpImage();
 			}
 		});
@@ -392,6 +393,13 @@ public class ImageManageView extends FrameLayout{
 	 * @param data
 	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
+		if(requestCode == 88 && SelectedActivity.SELECTED_RESULT_CODE == resultCode){
+			if(data != null){
+				ArrayList<CharSequence> list = data.getCharSequenceArrayListExtra(SelectedActivity.SELECTED_IMAGE_LIST_KEY);
+				System.out.println(list.size());
+			}
+			
+		}
 		if (data != null) {  
             if (requestCode == 2 && resultCode == Activity.RESULT_OK)  
                 showYourPic(data); 
