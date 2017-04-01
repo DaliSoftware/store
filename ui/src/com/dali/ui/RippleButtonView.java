@@ -16,6 +16,10 @@ package com.dali.ui;
  * limitations under the License.
  */
 
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.view.ViewHelper;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -25,10 +29,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
-
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewHelper;
 
 @SuppressLint("ClickableViewAccessibility")
 public class RippleButtonView extends Button {

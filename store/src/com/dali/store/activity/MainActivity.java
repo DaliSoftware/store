@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.dali.store.R;
 import com.dali.store.common.Resource;
-import com.dali.store.http.HttpUtil;
+import com.dali.app.base.http.HttpUtil;
 import com.dali.store.securiy.HashUtil;
 import com.dali.store.securiy.SHA256Transcrypter;
 import com.dali.store.securiy.Transcrypter;

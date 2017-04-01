@@ -3,8 +3,11 @@ package com.loopj.android.image;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
-import com.dali.store.http.HttpUtil;
+import org.apache.http.NameValuePair;
+
+import com.dali.app.base.http.HttpUtil;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -48,7 +51,9 @@ public class WebImage implements SmartImage {
 
         try {
         	if(url.contains("quanminJieshang")){
+        		List<NameValuePair> params;
         		bitmap = HttpUtil.downloadPIC(url, null);
+        		int s = HttpUtil.LoginTimeOut;
         	}else{
         		URLConnection conn = new URL(url).openConnection();
                 conn.setConnectTimeout(CONNECT_TIMEOUT);

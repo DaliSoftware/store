@@ -11,9 +11,9 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.util.LruCache;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 

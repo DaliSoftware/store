@@ -5,5 +5,7 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/zhy_handler_imageloader02"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/appbase"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

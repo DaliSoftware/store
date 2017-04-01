@@ -28,12 +28,12 @@
 		        	android:layout_width="wrap_content"
 		        	android:layout_height="wrap_content"
 		        	android:layout_marginRight="20dp"
-		        	android:src="@drawable/circle_add_96px"/>
+		        	android:src="@drawable/ui_circle_add_96px"/>
 	   	    
 	        	<ImageView android:id="@+id/iv_delImage"
 		        	android:layout_width="wrap_content"
 		        	android:layout_height="wrap_content"
-		        	android:src="@drawable/delete_67px"/>
+		        	android:src="@drawable/ui_delete_67px"/>
 	   		</LinearLayout>  
    	  		<LinearLayout android:id="@+id/ll_qiehuan_status"
 		         android:layout_width="wrap_content"

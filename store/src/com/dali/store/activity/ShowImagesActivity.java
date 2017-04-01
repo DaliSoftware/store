@@ -70,15 +70,15 @@ public class ShowImagesActivity extends Activity{
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 			if (e2.getX() - e1.getX() > 120) {            // 从左向右滑动（左进右出）  
-	            Animation rInAnim = AnimationUtils.loadAnimation(siActivity, R.anim.push_right_in);  // 向右滑动左侧进入的渐变效果（alpha  0.1 -> 1.0）  
-	            Animation rOutAnim = AnimationUtils.loadAnimation(siActivity, R.anim.push_right_out); // 向右滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
+	            Animation rInAnim = AnimationUtils.loadAnimation(siActivity, R.anim.ui_push_right_in);  // 向右滑动左侧进入的渐变效果（alpha  0.1 -> 1.0）  
+	            Animation rOutAnim = AnimationUtils.loadAnimation(siActivity, R.anim.ui_push_right_out); // 向右滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
 	  
 	            vfImages.setInAnimation(rInAnim);  
 	            vfImages.setOutAnimation(rOutAnim);  
 	            vfImages.showPrevious();  
 	        } else if (e2.getX() - e1.getX() < -120) {        // 从右向左滑动（右进左出）  
-	            Animation lInAnim = AnimationUtils.loadAnimation(siActivity, R.anim.push_left_in);       // 向左滑动左侧进入的渐变效果（alpha 0.1  -> 1.0）  
-	            Animation lOutAnim = AnimationUtils.loadAnimation(siActivity, R.anim.push_left_out);     // 向左滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
+	            Animation lInAnim = AnimationUtils.loadAnimation(siActivity, R.anim.ui_push_left_in);       // 向左滑动左侧进入的渐变效果（alpha 0.1  -> 1.0）  
+	            Animation lOutAnim = AnimationUtils.loadAnimation(siActivity, R.anim.ui_push_left_out);     // 向左滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
 	  
 	            vfImages.setInAnimation(lInAnim);  
 	            vfImages.setOutAnimation(lOutAnim);

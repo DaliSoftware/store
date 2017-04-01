@@ -18,7 +18,8 @@ package com.loopj.android.http;
 
 import java.io.UnsupportedEncodingException;
 
-import com.dali.store.BuildConfig;
+import com.dali.ui.BuildConfig;
+
 
 
 /**

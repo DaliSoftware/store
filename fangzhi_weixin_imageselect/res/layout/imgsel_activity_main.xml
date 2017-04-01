@@ -32,7 +32,7 @@
             android:text="选择图片"
             android:textColor="@android:color/white" />
 
-        <com.dali.ui.RippleButtonView
+        <Button
             android:id="@+id/bt_select_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,9 +41,6 @@
             android:gravity="center"
             android:text="完成"
             android:textSize="13dp"
-            dali:alphaFactor="0.7"
-            dali:rippleColor="#58FAAC"
-            dali:hover="true"
             android:background="@drawable/button_shape"
             android:textColor="@android:color/white" />
         

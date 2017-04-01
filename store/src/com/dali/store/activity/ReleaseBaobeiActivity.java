@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dali.store.R;
-import com.dali.store.ui.ImageManageView;
+import com.dali.ui.ImageManageView;
 
 import android.app.Activity;
 import android.os.Bundle;

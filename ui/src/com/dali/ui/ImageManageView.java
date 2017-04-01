@@ -1,4 +1,4 @@
-package com.dali.store.ui;
+package com.dali.ui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,9 +42,8 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dali.store.R;
-import com.dali.store.common.Resource;
-import com.dali.store.http.HttpUtil;
+import com.dali.app.base.common.Resource;
+import com.dali.app.base.http.HttpUtil;
 import com.loopj.android.image.SmartImageTask.OnCompleteListener;
 import com.loopj.android.image.SmartImageView;
 import com.zhy.imageloader.SelectedActivity;
@@ -92,8 +91,8 @@ public class ImageManageView extends FrameLayout{
 		
 		vfImages.setAutoStart(true);
 		vfImages.setFlipInterval(2000);
-        Animation lInAnim = AnimationUtils.loadAnimation(context, R.anim.push_left_in);       // 向左滑动左侧进入的渐变效果（alpha 0.1  -> 1.0）  
-        Animation lOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_left_out);     // 向左滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
+        Animation lInAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_left_in);       // 向左滑动左侧进入的渐变效果（alpha 0.1  -> 1.0）  
+        Animation lOutAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_left_out);     // 向左滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
         vfImages.setInAnimation(lInAnim);  
         vfImages.setOutAnimation(lOutAnim);
 	    if(vfImages.isAutoStart() && !vfImages.isFlipping()){  
@@ -128,11 +127,11 @@ public class ImageManageView extends FrameLayout{
 				// TODO 布局变化时调用  
 				for(int i = 0; i < imageSize; i ++){
 					SmartImageView siv = (SmartImageView) llQiehuanStatus.findViewById(i);
-					siv.setImageResource(R.drawable.round_16px);
+					siv.setImageResource(R.drawable.ui_round_16px);
 				}
 				SmartImageView siv = (SmartImageView) llQiehuanStatus.findViewById(vfImages.getDisplayedChild());
 				if(siv != null){
-					siv.setImageResource(R.drawable.round_24px);
+					siv.setImageResource(R.drawable.ui_round_24px);
 				}
 				
 			}
@@ -187,7 +186,7 @@ public class ImageManageView extends FrameLayout{
 			imageSize --;
 			v = vfImages.getCurrentView();
 			if(imageSize == 0){
-				((SmartImageView)v).setImageResource(R.drawable.uploadimage);
+				((SmartImageView)v).setImageResource(R.drawable.ui_uploadimage);
 			}else{
 				vfImages.removeView(v);
 				v = llQiehuanStatus.getChildAt(llQiehuanStatus.getChildCount() - 1);
@@ -215,7 +214,7 @@ public class ImageManageView extends FrameLayout{
 			vfImages.addView(siv);
 			
 			siv = new SmartImageView(context);
-			siv.setImageResource(R.drawable.round_16px);
+			siv.setImageResource(R.drawable.ui_round_16px);
 			siv.setId(imageSize ++);
 			llQiehuanStatus.addView(siv);
 		}
@@ -232,8 +231,8 @@ public class ImageManageView extends FrameLayout{
 			
 			if(imageSize != 0){
 				if(vfMenu.getCurrentView().getId() != R.id.ll_qiehuan_status){
-					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.push_bottom_in);
-					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_top_out);
+					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_bottom_in);
+					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_top_out);
 					vfMenu.setInAnimation(tInAnim);
 					vfMenu.setOutAnimation(tOutAnim);
 					vfMenu.showNext();
@@ -257,7 +256,7 @@ public class ImageManageView extends FrameLayout{
 			}
 			
 			siv = new SmartImageView(context);
-			siv.setImageResource(R.drawable.round_16px);
+			siv.setImageResource(R.drawable.ui_round_16px);
 			siv.setId(imageSize ++);
 			llQiehuanStatus.addView(siv);	
 			
@@ -336,8 +335,8 @@ public class ImageManageView extends FrameLayout{
 		}else if(MotionEvent.ACTION_UP == event.getAction()){
 			float juli = x - event.getX();//计算移動距離
 			if(juli < -50f){
-	            Animation rInAnim = AnimationUtils.loadAnimation(context, R.anim.push_right_in);  // 向右滑动左侧进入的渐变效果（alpha  0.1 -> 1.0）  
-	            Animation rOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_right_out); // 向右滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
+	            Animation rInAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_right_in);  // 向右滑动左侧进入的渐变效果（alpha  0.1 -> 1.0）  
+	            Animation rOutAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_right_out); // 向右滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
 	  
 	            vfImages.setInAnimation(rInAnim);  
 	            vfImages.setOutAnimation(rOutAnim);  
@@ -345,8 +344,8 @@ public class ImageManageView extends FrameLayout{
 	            vfImages.setAutoStart(false);
 	            
 	            if(lastTouchAction != 1){
-					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.push_bottom_in);
-					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_top_out);
+					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_bottom_in);
+					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_top_out);
 					vfMenu.setInAnimation(tInAnim);
 					vfMenu.setOutAnimation(tOutAnim);
 					vfMenu.showNext();
@@ -355,16 +354,16 @@ public class ImageManageView extends FrameLayout{
 	            
 	            
 			}else if(juli > 50f){
-	            Animation lInAnim = AnimationUtils.loadAnimation(context, R.anim.push_left_in);       // 向左滑动左侧进入的渐变效果（alpha 0.1  -> 1.0）  
-	            Animation lOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_left_out);     // 向左滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
+	            Animation lInAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_left_in);       // 向左滑动左侧进入的渐变效果（alpha 0.1  -> 1.0）  
+	            Animation lOutAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_left_out);     // 向左滑动右侧滑出的渐变效果（alpha 1.0  -> 0.1）  
 	  
 	            vfImages.setInAnimation(lInAnim);  
 	            vfImages.setOutAnimation(lOutAnim);
 	            vfImages.setAutoStart(false);
 	            vfImages.showNext();  
 				if(lastTouchAction != 1){//上一次动作不是滑动
-					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.push_bottom_in);
-					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_top_out);
+					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_bottom_in);
+					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_top_out);
 					vfMenu.setInAnimation(tInAnim);
 					vfMenu.setOutAnimation(tOutAnim);
 					vfMenu.showNext();
@@ -372,8 +371,8 @@ public class ImageManageView extends FrameLayout{
 				}
 			}else{
 				if(lastTouchAction != 0){
-					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.push_bottom_in);
-					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.push_top_out);
+					Animation tInAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_bottom_in);
+					Animation tOutAnim = AnimationUtils.loadAnimation(context, R.anim.ui_push_top_out);
 					vfMenu.setInAnimation(tInAnim);
 					vfMenu.setOutAnimation(tOutAnim);
 					vfMenu.showNext();
