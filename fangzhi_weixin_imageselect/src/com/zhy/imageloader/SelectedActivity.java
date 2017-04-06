@@ -2,6 +2,7 @@ package com.zhy.imageloader;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -64,38 +65,45 @@ public class SelectedActivity extends Activity implements OnImageDirSelected
 	private int maxSelectNumber  = 9;
 	
 	/**
-	 * 存储文件夹中的图片数量
+	 * 当前展示文件夹下的图片数量
 	 */
 	private int mPicsSize;
+	
 	/**
-	 * 图片数量最多的文件夹
+	 * 扫描出的所有的图片的 
+	 */
+	int totalCount = 0;
+	
+	/**
+	 * 当前展示的文件夹，第一次展示图片数量最多的文件夹，之后由用户自行选择要展示的文件夹
 	 */
 	private File mImgDir;
+
 	/**
-	 * 所有的图片
+	 * 手机中所有包含图片的文件夹信息
+	 */
+	private List<ImageFloder> mImageFloders = new ArrayList<ImageFloder>();
+	
+	/**
+	 * 当前展示的文件夹下的所有图片的路径
 	 */
 	private List<String> mImgs;
-
-	private GridView mGirdView;
-	private MyAdapter mAdapter;
+	
 	/**
 	 * 临时的辅助类，用于防止同一个文件夹的多次扫描
 	 */
 	private HashSet<String> mDirPaths = new HashSet<String>();
-
-	/**
-	 * 扫描拿到所有的图片文件夹
-	 */
-	private List<ImageFloder> mImageFloders = new ArrayList<ImageFloder>();
-
+	
+	private MyAdapter mAdapter;
+	private GridView mGirdView;
 	private RelativeLayout mBottomLy;
-
 	private TextView mChooseDir;
 	private TextView mImageCount;
 	private Button mBtSelOk;
 	
-	int totalCount = 0;
-
+	/**
+	 * 屏幕的高度
+	 */
 	private int mScreenHeight;
 
 	private ListImageDirPopupWindow mListImageDirPopupWindow;
@@ -139,10 +147,9 @@ public class SelectedActivity extends Activity implements OnImageDirSelected
 	 */
 	private void initListDirPopupWindw()
 	{
-		mListImageDirPopupWindow = new ListImageDirPopupWindow(
-				LayoutParams.MATCH_PARENT, (int) (mScreenHeight * 0.7),
-				mImageFloders, LayoutInflater.from(getApplicationContext())
-						.inflate(R.layout.list_dir, null));
+		View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.list_dir, null);
+		mListImageDirPopupWindow = new ListImageDirPopupWindow(LayoutParams.MATCH_PARENT, 
+				(int) (mScreenHeight * 0.7), mImageFloders, v);
 
 		mListImageDirPopupWindow.setOnDismissListener(new OnDismissListener()
 		{
@@ -186,6 +193,7 @@ public class SelectedActivity extends Activity implements OnImageDirSelected
 		setResult(SELECTED_RESULT_CODE, intent);
 		super.onBackPressed();
 	}
+	
 	/**
 	 * 利用ContentProvider扫描手机中的图片，此方法在运行在子线程中 完成图片的扫描，最终获得jpg最多的那个文件夹
 	 */
@@ -286,6 +294,10 @@ public class SelectedActivity extends Activity implements OnImageDirSelected
 
 	}
 
+	
+	
+	
+	
 	/**
 	 * 初始化View
 	 */
@@ -360,5 +372,9 @@ public class SelectedActivity extends Activity implements OnImageDirSelected
 
 	public void setMaxSelectNumber(int maxSelectNumber) {
 		this.maxSelectNumber = maxSelectNumber;
+	}
+	
+	public class Option implements Serializable{
+		
 	}
 }

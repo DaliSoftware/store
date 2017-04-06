@@ -34,4 +34,6 @@ public class ReleaseBaobeiActivity extends Activity{
 		imvBaobeiImage.addImageUrlsToViewFlipper(imageUrls);
 		
 	}
+	
+	
 }

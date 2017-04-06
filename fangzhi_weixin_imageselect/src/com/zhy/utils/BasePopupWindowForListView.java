@@ -38,6 +38,7 @@ public abstract class BasePopupWindowForListView<T> extends PopupWindow
 			boolean focusable, List<T> mDatas, Object... params)
 	{
 		super(contentView, width, height, focusable);
+		
 		this.mContentView = contentView;
 		context = contentView.getContext();
 		if (mDatas != null)
