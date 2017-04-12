@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -70,6 +71,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+		
+		Log.e("log", "fddd  ---- setContentView(R.layout.activity_main);");
 		ma = this;
 		btLogin = (Button) findViewById(R.id.bt_register);
 		btLogin.setOnTouchListener(new OnTouchListener() {

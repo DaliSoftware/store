@@ -336,7 +336,6 @@ public class SelectedActivity extends Activity implements OnImageDirSelected
 	@Override
 	public void selected(ImageFloder floder)
 	{
-
 		mImgDir = new File(floder.getDir());
 		mImgs = Arrays.asList(mImgDir.list(new FilenameFilter()
 		{

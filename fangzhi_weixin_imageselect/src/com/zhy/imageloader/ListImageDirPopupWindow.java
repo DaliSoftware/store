@@ -2,8 +2,10 @@ package com.zhy.imageloader;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -15,7 +17,8 @@ import com.zhy.utils.ViewHolder;
 public class ListImageDirPopupWindow extends BasePopupWindowForListView<ImageFloder>
 {
 	private ListView mListDir;
-
+	private CommonAdapter adapter;
+	
 	public ListImageDirPopupWindow(int width, int height,
 			List<ImageFloder> datas, View convertView)
 	{
@@ -25,8 +28,11 @@ public class ListImageDirPopupWindow extends BasePopupWindowForListView<ImageFlo
 	@Override
 	public void initViews()
 	{
+		
 		mListDir = (ListView) findViewById(R.id.id_list_dir);
-		mListDir.setAdapter(new CommonAdapter<ImageFloder>(context, mDatas,
+		
+		
+		adapter = new CommonAdapter<ImageFloder>(context, mDatas,
 				R.layout.list_dir_item)
 		{
 			@Override
@@ -37,7 +43,8 @@ public class ListImageDirPopupWindow extends BasePopupWindowForListView<ImageFlo
 						item.getFirstImagePath());
 				helper.setText(R.id.id_dir_item_count, item.getCount() + "张");
 			}
-		});
+		};
+		mListDir.setAdapter(adapter);
 	}
 
 	public interface OnImageDirSelected
@@ -64,11 +71,29 @@ public class ListImageDirPopupWindow extends BasePopupWindowForListView<ImageFlo
 
 				if (mImageDirSelected != null)
 				{
+					for(int i = 0; i < adapter.getCount(); i ++){
+						View v2 = adapter.getView(i, null, mListDir);
+						ImageView iv = (ImageView)v2.findViewById(R.id.id_dir_choose);
+						if(! v2.equals(view)){
+							//iv.setVisibility(View.GONE);
+							iv.setImageResource(R.drawable.ic_launcher);
+						}else{
+							iv.setVisibility(View.VISIBLE);
+						}
+					}
+/*					ImageView iv = (ImageView)view.findViewById(R.id.id_dir_choose);
+					iv.setImageResource(R.drawable.ic_launcher);*/
+					//xuanzheDangqian(view);
 					mImageDirSelected.selected(mDatas.get(position));
 				}
 			}
 		});
 	}
+	
+	private void xuanzheDangqian(View v){
+		
+	}
+	
 
 	@Override
 	public void init()
